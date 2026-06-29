@@ -96,9 +96,11 @@
     .field{min-width:0}.field.full{grid-column:1/-1}
     .field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
     .field input,.field select,.field textarea{width:100%;min-width:0;max-width:100%;border:1px solid #d9e0ea;border-radius:9px;background:#fff;padding:10px;font-size:16px;color:var(--text);outline:none}
-    .field input,.field select{height:42px}
+    .field input,.field select{height:42px;min-height:42px;max-height:42px}
     .field textarea{min-height:120px;height:auto;overflow:hidden;resize:none;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
-    .field input[type="date"]{min-width:0;width:100%}
+    .field input[type="date"],.field select{display:block;height:42px!important;min-height:42px!important;max-height:42px!important;padding-top:0!important;padding-bottom:0!important;line-height:40px}
+    .field input[type="date"]{min-width:0;width:100%;padding-left:10px!important;padding-right:10px!important}
+    .field input[type="date"]::-webkit-date-and-time-value{min-height:0;margin:0;padding:0;text-align:left}
     .field input:focus,.field select:focus,.field textarea:focus{border-color:#7392d8;box-shadow:0 0 0 3px rgba(95,131,216,.12)}
     .field input[readonly],.field textarea[readonly]{background:#f6f8fb;color:#273248;border-color:#e1e6ef;box-shadow:none}
     .field input[readonly]:focus,.field textarea[readonly]:focus{border-color:#e1e6ef;box-shadow:none}
