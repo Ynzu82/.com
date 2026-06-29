@@ -96,6 +96,8 @@
     .field input,.field select{height:42px}
     .field textarea{min-height:104px;resize:vertical;line-height:1.45}
     .field input:focus,.field select:focus,.field textarea:focus{border-color:#7392d8;box-shadow:0 0 0 3px rgba(95,131,216,.12)}
+    .field input[readonly],.field textarea[readonly]{background:#f6f8fb;color:#273248;border-color:#e1e6ef;box-shadow:none}
+    .field input[readonly]:focus,.field textarea[readonly]:focus{border-color:#e1e6ef;box-shadow:none}
     .save-btn{width:100%;height:46px;border:0;border-radius:11px;background:#416fcd;color:#fff;font-weight:800;margin-top:13px}
     .review-grid{grid-template-columns:1fr}.review-actions{display:grid;grid-template-columns:92px minmax(0,1fr);gap:9px;margin-top:13px}
     .cancel-btn{height:44px;border:1px solid #d6dce7;border-radius:10px;background:#fff;color:#63708a;font-weight:800}
@@ -186,12 +188,12 @@
     <form class="sheet" id="reviewForm">
       <div class="sheet-head"><h3>上传用车记录</h3><button class="close-btn" id="closeReviewBtn" type="button" aria-label="关闭">×</button></div>
       <div class="form-grid review-grid">
-        <div class="field full"><label for="reviewDate">日期</label><input id="reviewDate" type="date"></div>
-        <div class="field full"><label for="reviewChannel">车队</label><input id="reviewChannel" type="text"></div>
-        <div class="field full"><label for="reviewTeam">团队</label><input id="reviewTeam" type="text" list="teamDatalist"><datalist id="teamDatalist"></datalist></div>
-        <div class="field full"><label for="reviewDetail">用车详情</label><textarea id="reviewDetail"></textarea></div>
-        <div class="field full"><label for="reviewCost">车队费用</label><input id="reviewCost" type="number" inputmode="decimal" min="0" step="0.01"></div>
-        <div class="field full"><label for="reviewPrice">团队价格</label><input id="reviewPrice" type="number" inputmode="decimal" min="0" step="0.01"></div>
+        <div class="field full"><label for="reviewDate">日期（自动识别）</label><input id="reviewDate" type="date" readonly></div>
+        <div class="field full"><label for="reviewChannel">车队（自动识别）</label><input id="reviewChannel" type="text" readonly></div>
+        <div class="field full"><label for="reviewTeam">团队（自动识别）</label><input id="reviewTeam" type="text" readonly><datalist id="teamDatalist"></datalist></div>
+        <div class="field full"><label for="reviewDetail">用车详情（自动识别）</label><textarea id="reviewDetail" readonly></textarea></div>
+        <div class="field full"><label for="reviewCost">车队费用（自动识别）</label><input id="reviewCost" type="number" inputmode="decimal" min="0" step="0.01" readonly></div>
+        <div class="field full"><label for="reviewPrice">团队费用</label><input id="reviewPrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="只需填写这里"></div>
       </div>
       <div class="review-error" id="reviewError"></div>
       <div class="review-actions"><button class="cancel-btn" id="cancelReviewBtn" type="button">取消</button><button class="confirm-btn" type="submit">上传</button></div>
@@ -273,31 +275,57 @@
     }
     function parseFee(v){const m=String(v||"").replace(/,/g,"").match(/-?\d+(?:\.\d+)?/);return m?Number(m[0]):NaN}
     function parseTemplate(text){
-      const t=String(text||"").replace(/\r\n?/g,"\n");
-      const lines=t.split("\n");
-      const valueOf=(label)=>{
-        const re=new RegExp("^\\s*"+label+"\\s*[:：]\\s*(.*)$");
-        const line=lines.find(x=>re.test(x));
-        return line?(line.match(re)?.[1]||"").trim():""
+      const raw=String(text||"").replace(/\r\n?/g,"\n").replace(/\u00a0/g," ");
+      const lines=raw.split("\n").map(x=>x.trimEnd());
+      const labelPattern=/^\s*(日期|车队|渠道|团队|用车详情|用车记录|办理事项|费用|车队费用)\s*[:：]?\s*(.*)$/;
+      const entries=[];
+      lines.forEach((line,index)=>{
+        const m=line.match(labelPattern);
+        if(m)entries.push({index,label:m[1],tail:(m[2]||"").trim()});
+      });
+      const aliases={
+        date:["日期"],channel:["车队","渠道"],team:["团队"],
+        item:["用车详情","用车记录","办理事项"],fee:["费用","车队费用"]
       };
-      const detailStart=lines.findIndex(x=>/^\s*(?:用车详情|用车记录|办理事项)\s*[:：]/.test(x));
-      let item="";
-      if(detailStart>=0){
-        const first=lines[detailStart].replace(/^\s*(?:用车详情|用车记录|办理事项)\s*[:：]\s*/,"");
-        const rest=[];
-        for(let i=detailStart+1;i<lines.length;i++){
-          if(/^\s*(?:费用|车队费用)\s*[:：]/.test(lines[i]))break;
-          rest.push(lines[i]);
+      const nextEntryIndex=index=>{
+        const next=entries.find(e=>e.index>index);
+        return next?next.index:lines.length;
+      };
+      const readField=(names,multiline=false)=>{
+        const e=entries.find(x=>names.includes(x.label));
+        if(!e)return "";
+        const collected=[];
+        if(e.tail)collected.push(e.tail);
+        const stop=nextEntryIndex(e.index);
+        for(let i=e.index+1;i<stop;i++){
+          const value=lines[i].trim();
+          if(value)collected.push(value);
         }
-        item=[first,...rest].join("\n").trim();
+        if(multiline)return collected.join("\n").trim();
+        return (collected[0]||"").trim();
+      };
+
+      let dateRaw=readField(aliases.date);
+      let channel=readField(aliases.channel);
+      let team=readField(aliases.team);
+      let item=readField(aliases.item,true);
+      let feeRaw=readField(aliases.fee);
+
+      // 容错：即使没有冒号或标签识别失败，也按用户固定顺序尝试读取。
+      if(entries.length===0){
+        const values=lines.map(x=>x.trim()).filter(Boolean);
+        dateRaw=values[0]||"";
+        channel=values[1]||"";
+        team=values[2]||"";
+        feeRaw=values.length>4?values[values.length-1]:"";
+        item=values.length>4?values.slice(3,-1).join("\n"):(values[3]||"");
       }
-      const dateRaw=valueOf("日期");
-      const feeRaw=valueOf("(?:费用|车队费用)");
+
       return {
         date:normalizeDateInput(dateRaw),
-        channel:valueOf("(?:车队|渠道)"),
-        team:valueOf("团队"),
-        item,
+        channel:channel.trim(),
+        team:team.trim(),
+        item:item.trim(),
         fee:parseFee(feeRaw)
       }
     }
@@ -328,8 +356,9 @@
 
     function showParseError(prefix,message){const el=$(prefix+"Error");el.textContent=message;el.className="parse-error show"}
     function clearParseError(prefix){const el=$(prefix+"Error");el.textContent="";el.className="parse-error"}
-    function openReviewFromText(prefix){
-      const text=$(prefix+"Paste").value.trim();
+    function openReviewFromText(prefix,sourceText){
+      const box=$(prefix+"Paste");
+      const text=String(sourceText!==undefined?sourceText:box.value).trim();
       if(!text)return;
       const data=parseTemplate(text);
       clearParseError(prefix);
@@ -344,12 +373,28 @@
       $("reviewPrice").value="";
       $("reviewError").textContent="";$("reviewError").className="review-error";
       openMask(reviewMask);
-      setTimeout(()=>$('reviewPrice').focus(),120)
+      setTimeout(()=>$("reviewPrice").focus(),120)
     }
     function wirePaste(prefix){
       const box=$(prefix+"Paste");
-      box.addEventListener("paste",()=>setTimeout(()=>openReviewFromText(prefix),80));
-      box.addEventListener("input",e=>{if(e.inputType==="insertFromPaste")setTimeout(()=>openReviewFromText(prefix),80)});
+      box.addEventListener("paste",e=>{
+        const clip=(e.clipboardData||window.clipboardData);
+        const pasted=clip?clip.getData("text/plain"):"";
+        if(pasted){
+          e.preventDefault();
+          box.value=pasted;
+          lastTriggered[prefix]="";
+          requestAnimationFrame(()=>openReviewFromText(prefix,pasted));
+        }else{
+          setTimeout(()=>openReviewFromText(prefix),120);
+        }
+      });
+      box.addEventListener("input",()=>{
+        clearTimeout(parseTimers[prefix]);
+        parseTimers[prefix]=setTimeout(()=>{
+          if(box.value.trim())openReviewFromText(prefix);
+        },220);
+      });
     }
 
     function render(){
