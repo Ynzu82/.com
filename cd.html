@@ -12,8 +12,8 @@
       --yellow:#fff1a8;--yellow-card:#fffdf2;--danger:#d94b4b;--shadow:0 2px 10px rgba(28,45,79,.06)
     }
     *{box-sizing:border-box;max-width:100%}
-    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulation}
-    body{overflow-x:hidden}
+    html,body{margin:0;width:100%;max-width:100%;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:pan-y;overscroll-behavior-x:none}
+    body{overflow-x:hidden;position:relative}
     button,input,select,textarea{font-family:inherit;font-size:16px}
     button{touch-action:manipulation}
     .app{width:100%;max-width:560px;margin:0 auto;padding:14px 12px calc(92px + env(safe-area-inset-bottom))}
@@ -42,11 +42,9 @@
 
     .summary{margin-top:12px;display:none}.summary.show{display:block}
     .team-head{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto auto;gap:8px;padding:2px 0 10px}
-    .team-identity{grid-row:1/3;display:flex;align-items:center;min-height:94px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:var(--shadow);min-width:0}
-    .team-title-line{display:flex;align-items:center;gap:7px;min-width:0}
-    .team-head h2{font-size:18px;margin:0;overflow-wrap:anywhere}
-    .rename-team-btn{width:29px;height:29px;border:0;border-radius:8px;background:transparent;color:#172033;line-height:1;display:flex;align-items:center;justify-content:center;flex:0 0 auto;padding:4px}
-    .rename-team-btn svg{width:18px;height:18px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .team-identity{grid-row:1/3;display:flex;align-items:center;justify-content:center;min-height:94px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:var(--shadow);min-width:0;text-align:center}
+    .team-title-line{display:flex;align-items:center;justify-content:center;width:100%;min-width:0}
+    .team-head h2{font-size:18px;margin:0;overflow-wrap:anywhere;text-align:center;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
     .history-btn{grid-column:2;width:100%;height:39px;border:1px solid #cfd7e5;border-radius:9px;background:#fff;color:#53627e;font-size:13px;font-weight:800;padding:0 10px;white-space:nowrap}
     .pending-box{grid-column:2;width:100%;min-width:0;max-width:none;background:var(--green-bg);border:1px solid #d7f2e0;border-radius:12px;padding:9px 11px;box-shadow:var(--shadow)}
     .pending-label{font-size:11px;color:#5b8068}
@@ -85,21 +83,22 @@
     .secondary-btn{border:1px solid #cfd7e5;background:#fff;color:#53627e}
     .secondary-btn:disabled{opacity:.45}
 
-    .sheet-mask{position:fixed;inset:0;background:rgba(18,26,41,.38);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:0}
+    .sheet-mask{position:fixed;inset:0;width:100%;max-width:100%;overflow:hidden;background:rgba(18,26,41,.38);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:0}
     .sheet-mask.show{display:flex}
-    .sheet{width:100%;max-width:560px;background:#fff;border-radius:18px 18px 0 0;max-height:92vh;overflow:auto;padding:15px 14px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(0,0,0,.15)}
+    .sheet{width:100%;max-width:560px;min-width:0;background:#fff;border-radius:18px 18px 0 0;max-height:92vh;overflow-y:auto;overflow-x:hidden;overscroll-behavior-x:none;padding:15px 14px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(0,0,0,.15)}
     .sheet-mask.centered{align-items:center;padding:16px}
     .sheet-mask.centered .sheet{border-radius:18px;max-height:86vh;padding:15px 14px 18px;box-shadow:0 16px 45px rgba(0,0,0,.22)}
     .sheet-mask.review-mask{z-index:80}
     .sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
     .sheet-head h3{margin:0;font-size:17px}
     .close-btn{width:36px;height:36px;border:0;background:#f0f3f8;border-radius:50%;font-size:22px;color:#5a667c}
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
     .field{min-width:0}.field.full{grid-column:1/-1}
     .field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
-    .field input,.field select,.field textarea{width:100%;border:1px solid #d9e0ea;border-radius:9px;background:#fff;padding:10px;font-size:16px;color:var(--text);outline:none}
+    .field input,.field select,.field textarea{width:100%;min-width:0;max-width:100%;border:1px solid #d9e0ea;border-radius:9px;background:#fff;padding:10px;font-size:16px;color:var(--text);outline:none}
     .field input,.field select{height:42px}
-    .field textarea{min-height:104px;resize:vertical;line-height:1.45}
+    .field textarea{min-height:120px;height:auto;overflow:hidden;resize:none;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+    .field input[type="date"]{min-width:0;width:100%}
     .field input:focus,.field select:focus,.field textarea:focus{border-color:#7392d8;box-shadow:0 0 0 3px rgba(95,131,216,.12)}
     .field input[readonly],.field textarea[readonly]{background:#f6f8fb;color:#273248;border-color:#e1e6ef;box-shadow:none}
     .field input[readonly]:focus,.field textarea[readonly]:focus{border-color:#e1e6ef;box-shadow:none}
@@ -113,7 +112,7 @@
 
     @media(max-width:360px){
       .app{padding-left:9px;padding-right:9px}.money-row{gap:5px}.money-cell .amount{font-size:12px}
-      .form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.bottom-inner{grid-template-columns:minmax(0,1fr) 102px}
+      .bottom-inner{grid-template-columns:minmax(0,1fr) 102px}
     }
     @media print{
       @page{size:A4 portrait;margin:8mm 11mm}
@@ -150,7 +149,7 @@
     <section class="summary" id="summary">
       <div class="team-head">
         <div class="team-identity">
-          <div class="team-title-line"><h2 id="teamName"></h2><button class="rename-team-btn" id="renameTeamBtn" type="button" aria-label="修改团队名称"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 6.5l4 4M4 20l4.2-1 10.7-10.7a1.6 1.6 0 0 0 0-2.3l-.9-.9a1.6 1.6 0 0 0-2.3 0L5 15.8 4 20z"/></svg></button></div>
+          <div class="team-title-line"><h2 id="teamName" title="长按修改团队名称" aria-label="长按修改团队名称"></h2></div>
         </div>
         <div class="pending-box">
           <div class="pending-label">累计待结算</div>
@@ -170,15 +169,20 @@
     <button class="secondary-btn" id="exportBtn" type="button" disabled>导出 PDF</button>
   </div></div>
 
-  <div class="sheet-mask" id="newMask" role="dialog" aria-modal="true">
-    <div class="sheet">
+  <div class="sheet-mask centered" id="newMask" role="dialog" aria-modal="true">
+    <form class="sheet" id="newForm">
       <div class="sheet-head"><h3>新增用车记录</h3><button class="close-btn" id="closeNewBtn" type="button" aria-label="关闭">×</button></div>
-      <p class="new-team-note" id="newTeamNote"></p>
-      <div class="paste-card">
-        <textarea class="compact-paste" id="newPaste" aria-label="粘贴用车模板"></textarea>
-        <div class="parse-error" id="newError"></div>
+      <div class="form-grid">
+        <div class="field"><label for="newDate">日期</label><input id="newDate" type="date" required></div>
+        <div class="field"><label for="newStatus">结算状态</label><select id="newStatus"><option value="未结算">未结算</option><option value="已结算">已结算</option></select></div>
+        <div class="field"><label for="newChannel">车队</label><input id="newChannel" type="text"></div>
+        <div class="field"><label for="newTeam">团队</label><select id="newTeam" required></select></div>
+        <div class="field"><label for="newCost">车队价格</label><input id="newCost" type="number" inputmode="decimal" min="0" step="0.01"></div>
+        <div class="field"><label for="newPrice">团队价格</label><input id="newPrice" type="number" inputmode="decimal" min="0" step="0.01"></div>
+        <div class="field full"><label for="newDetail">详情</label><textarea id="newDetail" required></textarea></div>
       </div>
-    </div>
+      <button class="save-btn" type="submit">保存记录</button>
+    </form>
   </div>
 
   <div class="sheet-mask centered review-mask" id="reviewMask" role="dialog" aria-modal="true">
@@ -190,25 +194,25 @@
         <div class="field full"><label for="reviewTeam">团队（自动识别）</label><input id="reviewTeam" type="text" readonly><datalist id="teamDatalist"></datalist></div>
         <div class="field full"><label for="reviewDetail">用车详情（自动识别）</label><textarea id="reviewDetail" readonly></textarea></div>
         <div class="field full"><label for="reviewCost">车队费用（自动识别）</label><input id="reviewCost" type="number" inputmode="decimal" min="0" step="0.01" readonly></div>
-        <div class="field full"><label for="reviewPrice">团队费用</label><input id="reviewPrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="只需填写这里"></div>
+        <div class="field full"><label for="reviewPrice">团队费用</label><input id="reviewPrice" type="number" inputmode="decimal" min="0" step="0.01"></div>
       </div>
       <div class="review-error" id="reviewError"></div>
       <div class="review-actions"><button class="cancel-btn" id="cancelReviewBtn" type="button">取消</button><button class="confirm-btn" type="submit">上传</button></div>
     </form>
   </div>
 
-  <div class="sheet-mask" id="editMask" role="dialog" aria-modal="true">
+  <div class="sheet-mask centered" id="editMask" role="dialog" aria-modal="true">
     <form class="sheet" id="editForm">
       <div class="sheet-head"><h3>编辑用车记录</h3><button class="close-btn" id="closeEditBtn" type="button" aria-label="关闭">×</button></div>
       <input type="hidden" id="editId">
       <div class="form-grid">
-        <div class="field full"><label for="editTeam">团队</label><select id="editTeam" required></select></div>
-        <div class="field"><label for="editChannel">车队</label><input id="editChannel" type="text"></div>
         <div class="field"><label for="editDate">日期</label><input id="editDate" type="date" required></div>
-        <div class="field"><label for="editCost">车队成本</label><input id="editCost" type="number" inputmode="decimal" min="0" step="0.01"></div>
-        <div class="field"><label for="editPrice">团队费用</label><input id="editPrice" type="number" inputmode="decimal" min="0" step="0.01"></div>
+        <div class="field"><label for="editStatus">结算状态</label><select id="editStatus"><option value="未结算">未结算</option><option value="已结算">已结算</option></select></div>
+        <div class="field"><label for="editChannel">车队</label><input id="editChannel" type="text"></div>
+        <div class="field"><label for="editTeam">团队</label><select id="editTeam" required></select></div>
+        <div class="field"><label for="editCost">车队价格</label><input id="editCost" type="number" inputmode="decimal" min="0" step="0.01"></div>
+        <div class="field"><label for="editPrice">团队价格</label><input id="editPrice" type="number" inputmode="decimal" min="0" step="0.01"></div>
         <div class="field full"><label for="editDetail">详情</label><textarea id="editDetail" required></textarea></div>
-        <div class="field full"><label for="editStatus">结算状态</label><select id="editStatus"><option value="未结算">未结算</option><option value="已结算">已结算</option></select></div>
       </div>
       <button class="save-btn" type="submit">保存记录</button>
     </form>
@@ -350,6 +354,7 @@
     function fillTeamOptions(){
       const opts=state.teams.map(t=>`<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
       teamSelect.innerHTML='<option value="">请选择团队</option>'+opts;
+      $("newTeam").innerHTML='<option value="">请选择团队</option>'+opts;
       $("editTeam").innerHTML='<option value="">请选择团队</option>'+opts;
       $("teamDatalist").innerHTML=opts;
       teamSelect.value=selectedTeam
@@ -449,15 +454,27 @@
     }
     function openMask(mask){mask.classList.add("show");document.body.style.overflow="hidden"}
     function closeMask(mask){mask.classList.remove("show");if(!document.querySelector(".sheet-mask.show"))document.body.style.overflow=""}
+    function autoResizeTextarea(el){
+      if(!el)return;
+      el.style.height="auto";
+      el.style.height=Math.max(120,el.scrollHeight+2)+"px"
+    }
     function openNew(){
-      $("newPaste").value="";clearParseError("new");lastTriggered.new="";
-      $("newTeamNote").textContent=selectedTeam?`当前团队：${selectedTeam}`:"";
-      openMask(newMask);setTimeout(()=>$("newPaste").focus(),100)
+      $("newDate").value=todayISO();
+      $("newStatus").value="未结算";
+      $("newChannel").value="";
+      $("newTeam").value=selectedTeam||"";
+      $("newCost").value="";
+      $("newPrice").value="";
+      $("newDetail").value="";
+      autoResizeTextarea($("newDetail"));
+      openMask(newMask)
     }
     function openEdit(id){
       const r=state.records.find(x=>x.id===id);if(!r)return;
-      $("editId").value=id;$("editTeam").value=r.team;$("editChannel").value=r.channel||"";$("editDate").value=normalizeDateInput(r.date)||"";
-      $("editCost").value=r.cost??"";$("editPrice").value=r.price??"";$("editDetail").value=getDetail(r);$("editStatus").value=r.status||"未结算";
+      $("editId").value=id;$("editDate").value=normalizeDateInput(r.date)||"";$("editStatus").value=r.status||"未结算";
+      $("editChannel").value=r.channel||"";$("editTeam").value=r.team;$("editCost").value=r.cost??"";$("editPrice").value=r.price??"";
+      $("editDetail").value=getDetail(r);autoResizeTextarea($("editDetail"));
       openMask(editMask)
     }
     function openHistory(){
@@ -506,14 +523,32 @@
       const name=prompt("请输入新团队名称");if(!name)return;const clean=name.trim();if(!clean)return;
       ensureTeam(clean);saveState();selectedTeam=clean;render()
     });
-    $("renameTeamBtn").addEventListener("click",()=>{
+    function renameSelectedTeam(){
       if(!selectedTeam)return;
       const oldName=selectedTeam;const input=prompt("修改团队名称",oldName);if(input===null)return;
       const newName=input.trim();if(!newName||newName===oldName)return;
       state.records.forEach(r=>{if(r.team===oldName)r.team=newName});
       state.teams=state.teams.filter(t=>t!==oldName);
       ensureTeam(newName);selectedTeam=newName;saveState();render()
+    }
+    const teamNameEl=$("teamName");
+    let teamNamePressTimer=null,teamNameStartX=0,teamNameStartY=0,teamNameLongPressed=false;
+    function clearTeamNamePress(){
+      if(teamNamePressTimer){clearTimeout(teamNamePressTimer);teamNamePressTimer=null}
+    }
+    teamNameEl.addEventListener("pointerdown",e=>{
+      if(!selectedTeam)return;
+      clearTeamNamePress();teamNameStartX=e.clientX;teamNameStartY=e.clientY;teamNameLongPressed=false;
+      teamNamePressTimer=setTimeout(()=>{
+        teamNamePressTimer=null;teamNameLongPressed=true;if(navigator.vibrate)navigator.vibrate(20);renameSelectedTeam()
+      },600)
     });
+    teamNameEl.addEventListener("pointermove",e=>{
+      if(Math.hypot(e.clientX-teamNameStartX,e.clientY-teamNameStartY)>8)clearTeamNamePress()
+    });
+    ["pointerup","pointercancel","pointerleave"].forEach(type=>teamNameEl.addEventListener(type,clearTeamNamePress));
+    teamNameEl.addEventListener("contextmenu",e=>e.preventDefault());
+    teamNameEl.addEventListener("click",e=>{if(teamNameLongPressed){e.preventDefault();teamNameLongPressed=false}});
     newRecordBtn.addEventListener("click",openNew);
     $("historyBtn").addEventListener("click",openHistory);
     $("closeNewBtn").addEventListener("click",()=>closeMask(newMask));
@@ -523,6 +558,17 @@
     $("cancelReviewBtn").addEventListener("click",()=>closeReview(true));
     [newMask,editMask,historyMask].forEach(mask=>mask.addEventListener("click",e=>{if(e.target===mask)closeMask(mask)}));
     reviewMask.addEventListener("click",e=>{if(e.target===reviewMask)closeReview(true)});
+
+    $("newForm").addEventListener("submit",e=>{
+      e.preventDefault();
+      const team=$("newTeam").value.trim();if(!team)return;
+      const payload={
+        id:newId(),team,channel:$("newChannel").value.trim(),date:$("newDate").value,
+        item:$("newDetail").value.trim(),cost:Number($("newCost").value||0),price:Number($("newPrice").value||0),
+        note:"",status:$("newStatus").value
+      };
+      ensureTeam(payload.team);state.records.push(payload);selectedTeam=payload.team;saveState();closeMask(newMask);render();window.scrollTo(0,0)
+    });
 
     $("reviewForm").addEventListener("submit",e=>{
       e.preventDefault();if(!pendingUpload)return;
@@ -579,9 +625,12 @@
       window.print()
     });
 
+    ["newDetail","editDetail"].forEach(id=>$(id).addEventListener("input",e=>autoResizeTextarea(e.target)));
     ["gesturestart","gesturechange","gestureend"].forEach(type=>document.addEventListener(type,e=>e.preventDefault(),{passive:false}));
     document.addEventListener("dblclick",e=>e.preventDefault(),{passive:false});
-    wirePaste("new");fillTeamOptions();render();
+    document.addEventListener("wheel",e=>{if(e.ctrlKey)e.preventDefault()},{passive:false});
+    document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&["+","-","=","0"].includes(e.key))e.preventDefault()});
+    fillTeamOptions();render();
   </script>
 </body>
 </html>
