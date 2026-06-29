@@ -23,27 +23,32 @@
     .select-panel,.paste-card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
     .select-panel{padding:12px}
     .panel-label{font-size:12px;color:var(--muted);margin-bottom:7px}
-    .select-row{display:grid;grid-template-columns:minmax(0,1fr) 92px;gap:8px}
+    .select-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
     #teamSelect{width:100%;height:44px;border:2px solid #171717;border-radius:7px;background:#fff;padding:0 36px 0 11px;font-size:16px;color:var(--text);outline:none}
-    .add-team{height:44px;border:0;border-radius:9px;background:var(--blue-soft);color:#416cc7;font-size:13px;font-weight:800;line-height:1;padding:0 10px;white-space:nowrap}
+    .add-team{width:100%;height:44px;border:0;border-radius:9px;background:var(--blue-soft);color:#416cc7;font-size:14px;font-weight:800;line-height:1;padding:0 10px;white-space:nowrap}
 
-    .home-entry{margin-top:12px}
     .paste-card{padding:10px}
-    .paste-title{font-size:13px;font-weight:800;margin:0 0 6px;color:#3e4d67}
     .compact-paste{width:100%;height:88px;min-height:88px;border:1px solid #d7dde8;border-radius:9px;background:#fff;padding:10px;font-size:16px;line-height:1.45;resize:none;outline:none}
     .compact-paste:focus{border-color:#7392d8;box-shadow:0 0 0 3px rgba(95,131,216,.10)}
-    .paste-hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.45}
     .parse-error{display:none;margin-top:6px;font-size:12px;color:#b33d3d;line-height:1.45}
     .parse-error.show{display:block}
 
+    .team-overview{display:grid;gap:8px;margin-top:12px}
+    .team-overview-card{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:50px;padding:12px 14px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);font-size:15px;font-weight:750;color:#172033;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:pan-y;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,opacity .16s ease}
+    .team-overview-card strong{font-size:16px;color:var(--green);white-space:nowrap}
+    .team-overview.reordering .team-overview-card{animation:overviewWiggle .18s ease-in-out infinite alternate;touch-action:none}
+    .team-overview-card.dragging{opacity:.9;transform:scale(1.025);box-shadow:0 12px 28px rgba(28,45,79,.20);z-index:3;animation:none!important}
+    @keyframes overviewWiggle{from{transform:rotate(-.35deg)}to{transform:rotate(.35deg)}}
+
     .summary{margin-top:12px;display:none}.summary.show{display:block}
-    .team-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:4px 2px 9px}
-    .team-title-line{display:flex;align-items:center;gap:6px;min-width:0}
+    .team-head{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto auto;gap:8px;padding:2px 0 10px}
+    .team-identity{grid-row:1/3;display:flex;align-items:center;min-height:94px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:var(--shadow);min-width:0}
+    .team-title-line{display:flex;align-items:center;gap:7px;min-width:0}
     .team-head h2{font-size:18px;margin:0;overflow-wrap:anywhere}
-    .team-head p{font-size:12px;color:var(--muted);margin:3px 0 0}
-    .rename-team-btn{width:28px;height:28px;border:0;border-radius:8px;background:var(--blue-soft);color:#416cc7;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-    .history-btn{height:34px;border:1px solid #cfd7e5;border-radius:9px;background:#fff;color:#53627e;font-size:12px;font-weight:800;padding:0 12px;white-space:nowrap}
-    .pending-box{display:inline-block;min-width:210px;max-width:78%;background:var(--green-bg);border:1px solid #d7f2e0;border-radius:12px;padding:9px 12px;box-shadow:var(--shadow)}
+    .rename-team-btn{width:29px;height:29px;border:0;border-radius:8px;background:transparent;color:#172033;line-height:1;display:flex;align-items:center;justify-content:center;flex:0 0 auto;padding:4px}
+    .rename-team-btn svg{width:18px;height:18px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .history-btn{grid-column:2;width:100%;height:39px;border:1px solid #cfd7e5;border-radius:9px;background:#fff;color:#53627e;font-size:13px;font-weight:800;padding:0 10px;white-space:nowrap}
+    .pending-box{grid-column:2;width:100%;min-width:0;max-width:none;background:var(--green-bg);border:1px solid #d7f2e0;border-radius:12px;padding:9px 11px;box-shadow:var(--shadow)}
     .pending-label{font-size:11px;color:#5b8068}
     .pending-amount{font-size:23px;line-height:1.15;font-weight:800;color:var(--green);margin-top:2px;overflow-wrap:anywhere}
     #pendingDetails{margin-top:10px}
@@ -62,7 +67,7 @@
     .money-cell .amount{font-size:13px;font-weight:800;margin-top:3px;overflow-wrap:anywhere}
     .money-cell.price .amount{color:var(--green)}
     .money-cell.profit .amount.negative{color:var(--danger)}
-    .detail{margin-top:9px;background:rgba(245,247,251,.8);border-radius:9px;padding:8px 9px}
+    .detail{margin-top:9px;background:transparent;border-radius:0;padding:8px 0 0;border-top:1px dashed rgba(160,140,55,.28)}
     .detail-label{font-size:10px;color:var(--muted);margin-bottom:4px}
     .detail-text{font-size:12px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
     .record-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:9px}
@@ -109,7 +114,6 @@
     @media(max-width:360px){
       .app{padding-left:9px;padding-right:9px}.money-row{gap:5px}.money-cell .amount{font-size:12px}
       .form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.bottom-inner{grid-template-columns:minmax(0,1fr) 102px}
-      .pending-box{max-width:90%}
     }
     @media print{
       @page{size:A4 portrait;margin:8mm 11mm}
@@ -141,25 +145,18 @@
       </div>
     </section>
 
-    <section class="home-entry" id="homeEntry">
-      <div class="paste-card">
-        <div class="paste-title">粘贴用车记录</div>
-        <textarea class="compact-paste" id="homePaste" aria-label="粘贴用车模板"></textarea>
-        <div class="parse-error" id="homeError"></div>
-      </div>
-    </section>
+    <section class="team-overview" id="teamOverview" aria-label="团队待结算列表"></section>
 
     <section class="summary" id="summary">
       <div class="team-head">
-        <div>
-          <div class="team-title-line"><h2 id="teamName"></h2><button class="rename-team-btn" id="renameTeamBtn" type="button" aria-label="修改团队名称">✎</button></div>
-          <p id="teamCount"></p>
+        <div class="team-identity">
+          <div class="team-title-line"><h2 id="teamName"></h2><button class="rename-team-btn" id="renameTeamBtn" type="button" aria-label="修改团队名称"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 6.5l4 4M4 20l4.2-1 10.7-10.7a1.6 1.6 0 0 0 0-2.3l-.9-.9a1.6 1.6 0 0 0-2.3 0L5 15.8 4 20z"/></svg></button></div>
+        </div>
+        <div class="pending-box">
+          <div class="pending-label">累计待结算</div>
+          <div class="pending-amount" id="pendingAmount">RM 0.00</div>
         </div>
         <button class="history-btn" id="historyBtn" type="button">结算记录</button>
-      </div>
-      <div class="pending-box">
-        <div class="pending-label">累计待结算</div>
-        <div class="pending-amount" id="pendingAmount">RM 0.00</div>
       </div>
       <div id="pendingDetails">
         <div class="records" id="records"></div>
@@ -233,11 +230,11 @@
     const state = loadState();
     let selectedTeam = "";
     let pendingUpload = null;
-    const lastTriggered = {home:"",new:""};
-    const parseTimers = {home:null,new:null};
+    const lastTriggered = {new:""};
+    const parseTimers = {new:null};
 
     const $ = id=>document.getElementById(id);
-    const teamSelect=$("teamSelect"), summary=$("summary"), homeEntry=$("homeEntry"), recordsEl=$("records");
+    const teamSelect=$("teamSelect"), summary=$("summary"), teamOverview=$("teamOverview"), recordsEl=$("records");
     const pendingDetails=$("pendingDetails"), newRecordBtn=$("newRecordBtn"), exportBtn=$("exportBtn"), bottomBar=$("bottomBar");
     const newMask=$("newMask"), editMask=$("editMask"), historyMask=$("historyMask"), reviewMask=$("reviewMask");
 
@@ -259,6 +256,10 @@
     }
     function saveState(){localStorage.setItem(STORE_KEY,JSON.stringify(state))}
     function money(v){return "RM "+Number(v||0).toLocaleString("en-MY",{minimumFractionDigits:2,maximumFractionDigits:2})}
+    function simpleAmount(v){
+      const n=Number(v||0);
+      return n.toLocaleString("en-MY",{minimumFractionDigits:Number.isInteger(n)?0:2,maximumFractionDigits:2})
+    }
     function formatDate(v){
       if(!v)return "未填写日期";
       const m=String(v).match(/(\d{4})[-\/.年](\d{1,2})[-\/.月](\d{1,2})/);
@@ -397,20 +398,44 @@
       });
     }
 
+    function renderTeamOverview(){
+      teamOverview.innerHTML=state.teams.map(team=>{
+        const total=state.records.filter(r=>r.team===team&&r.status!=="已结算").reduce((sum,r)=>sum+Number(r.price||0),0);
+        return `<div class="team-overview-card" role="button" tabindex="0" data-team="${escapeHtml(team)}"><span>${escapeHtml(team)}待结算：</span><strong>${escapeHtml(simpleAmount(total))}</strong></div>`
+      }).join("")
+    }
+
+    const reorderState={timer:null,active:null,pointerId:null,startX:0,startY:0,suppressClick:false};
+    function clearReorderTimer(){if(reorderState.timer){clearTimeout(reorderState.timer);reorderState.timer=null}}
+    function beginTeamReorder(card,pointerId){
+      reorderState.active=card;reorderState.pointerId=pointerId;reorderState.suppressClick=true;
+      teamOverview.classList.add("reordering");card.classList.add("dragging");
+      try{card.setPointerCapture(pointerId)}catch(e){}
+      if(navigator.vibrate)navigator.vibrate(20)
+    }
+    function finishTeamReorder(){
+      clearReorderTimer();
+      if(!reorderState.active)return;
+      const card=reorderState.active;card.classList.remove("dragging");teamOverview.classList.remove("reordering");
+      state.teams=[...teamOverview.querySelectorAll(".team-overview-card")].map(el=>el.dataset.team);
+      saveState();reorderState.active=null;reorderState.pointerId=null;
+      setTimeout(()=>{reorderState.suppressClick=false},180)
+    }
+
     function render(){
       fillTeamOptions();teamSelect.value=selectedTeam;
       if(!selectedTeam){
-        summary.classList.remove("show");homeEntry.style.display="block";bottomBar.style.display="none";newRecordBtn.disabled=true;exportBtn.disabled=true;return
+        summary.classList.remove("show");teamOverview.style.display="grid";renderTeamOverview();bottomBar.style.display="none";newRecordBtn.disabled=true;exportBtn.disabled=true;return
       }
-      homeEntry.style.display="none";summary.classList.add("show");bottomBar.style.display="block";newRecordBtn.disabled=false;exportBtn.disabled=false;
+      teamOverview.style.display="none";summary.classList.add("show");bottomBar.style.display="block";newRecordBtn.disabled=false;exportBtn.disabled=false;
       const list=state.records.filter(r=>r.team===selectedTeam).sort((a,b)=>(b.date||"").localeCompare(a.date||"")||String(b.id).localeCompare(String(a.id)));
       const pending=list.filter(r=>r.status!=="已结算");
       const settled=list.filter(r=>r.status==="已结算");
       const totalPrice=pending.reduce((s,r)=>s+Number(r.price||0),0);
-      $("teamName").textContent=selectedTeam;$("teamCount").textContent=`共 ${list.length} 笔记录`;
+      $("teamName").textContent=selectedTeam;
       $("pendingAmount").textContent=money(totalPrice);
       pendingDetails.style.display=pending.length?"block":"none";
-      $("historyBtn").textContent=`结算记录${settled.length?` ${settled.length}`:""}`;
+      $("historyBtn").textContent="结算记录";
       recordsEl.innerHTML=pending.length?pending.map(recordCard).join(""):""
     }
     function detailBlock(r){const detail=getDetail(r);return detail?`<div class="detail"><div class="detail-label">详情</div><div class="detail-text">${escapeHtml(detail)}</div></div>`:""}
@@ -446,6 +471,35 @@
       if(resetTrigger&&prefix)lastTriggered[prefix]="";
       pendingUpload=null;closeMask(reviewMask)
     }
+
+    teamOverview.addEventListener("pointerdown",e=>{
+      const card=e.target.closest(".team-overview-card");if(!card)return;
+      clearReorderTimer();reorderState.startX=e.clientX;reorderState.startY=e.clientY;
+      reorderState.timer=setTimeout(()=>beginTeamReorder(card,e.pointerId),480)
+    });
+    teamOverview.addEventListener("pointermove",e=>{
+      if(!reorderState.active){
+        if(Math.hypot(e.clientX-reorderState.startX,e.clientY-reorderState.startY)>9)clearReorderTimer();
+        return
+      }
+      e.preventDefault();
+      const target=document.elementFromPoint(e.clientX,e.clientY)?.closest(".team-overview-card");
+      if(!target||target===reorderState.active||!teamOverview.contains(target))return;
+      const rect=target.getBoundingClientRect();
+      teamOverview.insertBefore(reorderState.active,e.clientY<rect.top+rect.height/2?target:target.nextSibling)
+    },{passive:false});
+    teamOverview.addEventListener("pointerup",finishTeamReorder);
+    teamOverview.addEventListener("pointercancel",finishTeamReorder);
+    teamOverview.addEventListener("pointerleave",e=>{if(!reorderState.active)clearReorderTimer()});
+    teamOverview.addEventListener("contextmenu",e=>{if(e.target.closest(".team-overview-card"))e.preventDefault()});
+    teamOverview.addEventListener("click",e=>{
+      const card=e.target.closest(".team-overview-card");if(!card||reorderState.suppressClick)return;
+      selectedTeam=card.dataset.team;render();window.scrollTo(0,0)
+    });
+    teamOverview.addEventListener("keydown",e=>{
+      const card=e.target.closest(".team-overview-card");if(!card||!(e.key==="Enter"||e.key===" "))return;
+      e.preventDefault();selectedTeam=card.dataset.team;render();window.scrollTo(0,0)
+    });
 
     teamSelect.addEventListener("change",()=>{selectedTeam=teamSelect.value;render();window.scrollTo(0,0)});
     $("addTeamBtn").addEventListener("click",()=>{
@@ -527,7 +581,7 @@
 
     ["gesturestart","gesturechange","gestureend"].forEach(type=>document.addEventListener(type,e=>e.preventDefault(),{passive:false}));
     document.addEventListener("dblclick",e=>e.preventDefault(),{passive:false});
-    wirePaste("home");wirePaste("new");fillTeamOptions();render();
+    wirePaste("new");fillTeamOptions();render();
   </script>
 </body>
 </html>
