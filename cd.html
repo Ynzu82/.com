@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#f5f7fb">
-  <title>车队用车结算</title>
+  <title>Fang车队详情</title>
   <style>
     :root{
       --bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#7c879e;--line:#e5eaf2;
@@ -23,9 +23,9 @@
     .select-panel,.paste-card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
     .select-panel{padding:12px}
     .panel-label{font-size:12px;color:var(--muted);margin-bottom:7px}
-    .select-row{display:grid;grid-template-columns:minmax(0,1fr) 42px;gap:8px}
+    .select-row{display:grid;grid-template-columns:minmax(0,1fr) 92px;gap:8px}
     #teamSelect{width:100%;height:44px;border:2px solid #171717;border-radius:7px;background:#fff;padding:0 36px 0 11px;font-size:16px;color:var(--text);outline:none}
-    .add-team{height:44px;border:0;border-radius:9px;background:var(--blue-soft);color:#416cc7;font-size:24px;line-height:1}
+    .add-team{height:44px;border:0;border-radius:9px;background:var(--blue-soft);color:#416cc7;font-size:13px;font-weight:800;line-height:1;padding:0 10px;white-space:nowrap}
 
     .home-entry{margin-top:12px}
     .paste-card{padding:10px}
@@ -97,9 +97,9 @@
     .field textarea{min-height:104px;resize:vertical;line-height:1.45}
     .field input:focus,.field select:focus,.field textarea:focus{border-color:#7392d8;box-shadow:0 0 0 3px rgba(95,131,216,.12)}
     .save-btn{width:100%;height:46px;border:0;border-radius:11px;background:#416fcd;color:#fff;font-weight:800;margin-top:13px}
-    .review-actions{display:grid;grid-template-columns:92px minmax(0,1fr);gap:9px;margin-top:13px}
+    .review-grid{grid-template-columns:1fr}.review-actions{display:grid;grid-template-columns:92px minmax(0,1fr);gap:9px;margin-top:13px}
     .cancel-btn{height:44px;border:1px solid #d6dce7;border-radius:10px;background:#fff;color:#63708a;font-weight:800}
-    .confirm-btn{height:44px;border:0;border-radius:10px;background:#416fcd;color:#fff;font-weight:800}
+    .confirm-btn{height:44px;border:0;border-radius:10px;background:#ff5a00;color:#fff;font-weight:800}
     .review-error{display:none;margin-top:8px;font-size:12px;color:#b33d3d}.review-error.show{display:block}
     .new-team-note{font-size:11px;color:var(--muted);margin:0 0 8px}
     .print-area{display:none}
@@ -130,21 +130,19 @@
 </head>
 <body>
   <main class="app">
-    <header class="topbar"><h1>车队用车结算</h1><div class="sub">团队用车明细与累计待结算</div></header>
+    <header class="topbar"><h1>Fang车队详情</h1><div class="sub">团队用车明细与累计待结算</div></header>
 
     <section class="select-panel">
-      <div class="panel-label">选择团队</div>
       <div class="select-row">
         <select id="teamSelect" aria-label="选择团队"><option value="">请选择团队</option></select>
-        <button class="add-team" id="addTeamBtn" type="button" aria-label="新增团队">＋</button>
+        <button class="add-team" id="addTeamBtn" type="button" aria-label="添加团队">添加团队</button>
       </div>
     </section>
 
     <section class="home-entry" id="homeEntry">
       <div class="paste-card">
         <div class="paste-title">粘贴用车记录</div>
-        <textarea class="compact-paste" id="homePaste" aria-label="粘贴用车模板" placeholder="日期：年/月/日&#10;车队：&#10;团队：&#10;用车详情：&#10;费用："></textarea>
-        <div class="paste-hint">完整粘贴后会自动弹出确认窗口。</div>
+        <textarea class="compact-paste" id="homePaste" aria-label="粘贴用车模板"></textarea>
         <div class="parse-error" id="homeError"></div>
       </div>
     </section>
@@ -168,7 +166,7 @@
     </section>
   </main>
 
-  <div class="bottom-bar"><div class="bottom-inner">
+  <div class="bottom-bar" id="bottomBar"><div class="bottom-inner">
     <button class="primary-bottom" id="newRecordBtn" type="button" disabled>＋ 新增用车记录</button>
     <button class="secondary-btn" id="exportBtn" type="button" disabled>导出 PDF</button>
   </div></div>
@@ -178,8 +176,7 @@
       <div class="sheet-head"><h3>新增用车记录</h3><button class="close-btn" id="closeNewBtn" type="button" aria-label="关闭">×</button></div>
       <p class="new-team-note" id="newTeamNote"></p>
       <div class="paste-card">
-        <textarea class="compact-paste" id="newPaste" aria-label="粘贴用车模板" placeholder="日期：年/月/日&#10;车队：&#10;团队：&#10;用车详情：&#10;费用："></textarea>
-        <div class="paste-hint">完整粘贴后会自动弹出确认窗口。</div>
+        <textarea class="compact-paste" id="newPaste" aria-label="粘贴用车模板"></textarea>
         <div class="parse-error" id="newError"></div>
       </div>
     </div>
@@ -187,17 +184,17 @@
 
   <div class="sheet-mask centered review-mask" id="reviewMask" role="dialog" aria-modal="true">
     <form class="sheet" id="reviewForm">
-      <div class="sheet-head"><h3>确认用车记录</h3><button class="close-btn" id="closeReviewBtn" type="button" aria-label="关闭">×</button></div>
-      <div class="form-grid">
-        <div class="field"><label for="reviewDate">日期</label><input id="reviewDate" type="date" required></div>
-        <div class="field"><label for="reviewChannel">车队</label><input id="reviewChannel" type="text"></div>
-        <div class="field full"><label for="reviewTeam">团队</label><input id="reviewTeam" type="text" list="teamDatalist" required><datalist id="teamDatalist"></datalist></div>
-        <div class="field full"><label for="reviewDetail">用车详情</label><textarea id="reviewDetail" required></textarea></div>
-        <div class="field"><label for="reviewCost">车队费用</label><input id="reviewCost" type="number" inputmode="decimal" min="0" step="0.01" required></div>
-        <div class="field"><label for="reviewPrice">团队费用</label><input id="reviewPrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="请填写" required></div>
+      <div class="sheet-head"><h3>上传用车记录</h3><button class="close-btn" id="closeReviewBtn" type="button" aria-label="关闭">×</button></div>
+      <div class="form-grid review-grid">
+        <div class="field full"><label for="reviewDate">日期</label><input id="reviewDate" type="date"></div>
+        <div class="field full"><label for="reviewChannel">车队</label><input id="reviewChannel" type="text"></div>
+        <div class="field full"><label for="reviewTeam">团队</label><input id="reviewTeam" type="text" list="teamDatalist"><datalist id="teamDatalist"></datalist></div>
+        <div class="field full"><label for="reviewDetail">用车详情</label><textarea id="reviewDetail"></textarea></div>
+        <div class="field full"><label for="reviewCost">车队费用</label><input id="reviewCost" type="number" inputmode="decimal" min="0" step="0.01"></div>
+        <div class="field full"><label for="reviewPrice">团队价格</label><input id="reviewPrice" type="number" inputmode="decimal" min="0" step="0.01"></div>
       </div>
       <div class="review-error" id="reviewError"></div>
-      <div class="review-actions"><button class="cancel-btn" id="cancelReviewBtn" type="button">取消</button><button class="confirm-btn" type="submit">确认生成</button></div>
+      <div class="review-actions"><button class="cancel-btn" id="cancelReviewBtn" type="button">取消</button><button class="confirm-btn" type="submit">上传</button></div>
     </form>
   </div>
 
@@ -239,7 +236,7 @@
 
     const $ = id=>document.getElementById(id);
     const teamSelect=$("teamSelect"), summary=$("summary"), homeEntry=$("homeEntry"), recordsEl=$("records");
-    const pendingDetails=$("pendingDetails"), newRecordBtn=$("newRecordBtn"), exportBtn=$("exportBtn");
+    const pendingDetails=$("pendingDetails"), newRecordBtn=$("newRecordBtn"), exportBtn=$("exportBtn"), bottomBar=$("bottomBar");
     const newMask=$("newMask"), editMask=$("editMask"), historyMask=$("historyMask"), reviewMask=$("reviewMask");
 
     function loadState(){
@@ -277,12 +274,31 @@
     function parseFee(v){const m=String(v||"").replace(/,/g,"").match(/-?\d+(?:\.\d+)?/);return m?Number(m[0]):NaN}
     function parseTemplate(text){
       const t=String(text||"").replace(/\r\n?/g,"\n");
+      const lines=t.split("\n");
+      const valueOf=(label)=>{
+        const re=new RegExp("^\\s*"+label+"\\s*[:：]\\s*(.*)$");
+        const line=lines.find(x=>re.test(x));
+        return line?(line.match(re)?.[1]||"").trim():""
+      };
+      const detailStart=lines.findIndex(x=>/^\s*(?:用车详情|用车记录|办理事项)\s*[:：]/.test(x));
+      let item="";
+      if(detailStart>=0){
+        const first=lines[detailStart].replace(/^\s*(?:用车详情|用车记录|办理事项)\s*[:：]\s*/,"");
+        const rest=[];
+        for(let i=detailStart+1;i<lines.length;i++){
+          if(/^\s*(?:费用|车队费用)\s*[:：]/.test(lines[i]))break;
+          rest.push(lines[i]);
+        }
+        item=[first,...rest].join("\n").trim();
+      }
+      const dateRaw=valueOf("日期");
+      const feeRaw=valueOf("(?:费用|车队费用)");
       return {
-        date:normalizeDateInput(t.match(/^\s*日期\s*[:：]\s*(.+)$/m)?.[1]||""),
-        channel:String(t.match(/^\s*(?:车队|渠道)\s*[:：]\s*(.*)$/m)?.[1]||"").trim(),
-        team:String(t.match(/^\s*团队\s*[:：]\s*(.+)$/m)?.[1]||"").trim(),
-        item:String(t.match(/^\s*(?:用车详情|用车记录|办理事项)\s*[:：]\s*([\s\S]*?)(?=^\s*费用\s*[:：])/m)?.[1]||"").trim(),
-        fee:parseFee(t.match(/^\s*费用\s*[:：]\s*(.+)$/m)?.[1]||"")
+        date:normalizeDateInput(dateRaw),
+        channel:valueOf("(?:车队|渠道)"),
+        team:valueOf("团队"),
+        item,
+        fee:parseFee(feeRaw)
       }
     }
     function cleanDetailText(value){
@@ -312,52 +328,36 @@
 
     function showParseError(prefix,message){const el=$(prefix+"Error");el.textContent=message;el.className="parse-error show"}
     function clearParseError(prefix){const el=$(prefix+"Error");el.textContent="";el.className="parse-error"}
-    function templateComplete(data,prefix){
-      const team=data.team||(prefix==="new"?selectedTeam:"");
-      return !!(data.date&&team&&data.item&&Number.isFinite(data.fee)&&data.fee>=0)
-    }
     function openReviewFromText(prefix){
       const text=$(prefix+"Paste").value.trim();
       if(!text)return;
       const data=parseTemplate(text);
-      if(!templateComplete(data,prefix)){
-        showParseError(prefix,"请完整填写日期、团队、用车详情和费用。");return
-      }
       clearParseError(prefix);
       if(text===lastTriggered[prefix]&&reviewMask.classList.contains("show"))return;
       lastTriggered[prefix]=text;
       pendingUpload={prefix,text};
-      $("reviewDate").value=data.date;
-      $("reviewChannel").value=data.channel;
+      $("reviewDate").value=data.date||"";
+      $("reviewChannel").value=data.channel||"";
       $("reviewTeam").value=data.team||(prefix==="new"?selectedTeam:"");
-      $("reviewDetail").value=data.item;
-      $("reviewCost").value=data.fee;
+      $("reviewDetail").value=data.item||"";
+      $("reviewCost").value=Number.isFinite(data.fee)?data.fee:"";
       $("reviewPrice").value="";
       $("reviewError").textContent="";$("reviewError").className="review-error";
       openMask(reviewMask);
-      setTimeout(()=>$("reviewPrice").focus(),120)
+      setTimeout(()=>$('reviewPrice').focus(),120)
     }
     function wirePaste(prefix){
       const box=$(prefix+"Paste");
-      const schedule=()=>{
-        clearTimeout(parseTimers[prefix]);
-        parseTimers[prefix]=setTimeout(()=>{
-          const data=parseTemplate(box.value);
-          if(templateComplete(data,prefix))openReviewFromText(prefix);
-          else if(box.value.trim())showParseError(prefix,"请完整填写日期、团队、用车详情和费用。");
-          else clearParseError(prefix)
-        },260)
-      };
-      box.addEventListener("paste",()=>setTimeout(schedule,0));
-      box.addEventListener("input",schedule)
+      box.addEventListener("paste",()=>setTimeout(()=>openReviewFromText(prefix),80));
+      box.addEventListener("input",e=>{if(e.inputType==="insertFromPaste")setTimeout(()=>openReviewFromText(prefix),80)});
     }
 
     function render(){
       fillTeamOptions();teamSelect.value=selectedTeam;
       if(!selectedTeam){
-        summary.classList.remove("show");homeEntry.style.display="block";newRecordBtn.disabled=true;exportBtn.disabled=true;return
+        summary.classList.remove("show");homeEntry.style.display="block";bottomBar.style.display="none";newRecordBtn.disabled=true;exportBtn.disabled=true;return
       }
-      homeEntry.style.display="none";summary.classList.add("show");newRecordBtn.disabled=false;exportBtn.disabled=false;
+      homeEntry.style.display="none";summary.classList.add("show");bottomBar.style.display="block";newRecordBtn.disabled=false;exportBtn.disabled=false;
       const list=state.records.filter(r=>r.team===selectedTeam).sort((a,b)=>(b.date||"").localeCompare(a.date||"")||String(b.id).localeCompare(String(a.id)));
       const pending=list.filter(r=>r.status!=="已结算");
       const settled=list.filter(r=>r.status==="已结算");
@@ -427,14 +427,14 @@
 
     $("reviewForm").addEventListener("submit",e=>{
       e.preventDefault();if(!pendingUpload)return;
+      const costValue=Number($("reviewCost").value),priceValue=Number($("reviewPrice").value);
       const payload={
-        date:$("reviewDate").value,channel:$("reviewChannel").value.trim(),team:$("reviewTeam").value.trim(),
-        item:$("reviewDetail").value.trim(),cost:Number($("reviewCost").value),price:Number($("reviewPrice").value)
+        date:$("reviewDate").value||"",channel:$("reviewChannel").value.trim(),
+        team:$("reviewTeam").value.trim()||selectedTeam||"未分类",
+        item:$("reviewDetail").value.trim(),
+        cost:Number.isFinite(costValue)&&costValue>=0?costValue:0,
+        price:Number.isFinite(priceValue)&&priceValue>=0?priceValue:0
       };
-      const missing=[];
-      if(!payload.date)missing.push("日期");if(!payload.team)missing.push("团队");if(!payload.item)missing.push("用车详情");
-      if(!Number.isFinite(payload.cost)||payload.cost<0)missing.push("车队费用");if(!Number.isFinite(payload.price)||payload.price<0)missing.push("团队费用");
-      if(missing.length){$("reviewError").textContent="请填写："+missing.join("、");$("reviewError").className="review-error show";return}
       const prefix=pendingUpload.prefix;
       ensureTeam(payload.team);
       state.records.push({id:newId(),team:payload.team,channel:payload.channel,date:payload.date,item:payload.item,cost:payload.cost,price:payload.price,note:"",status:"未结算"});
