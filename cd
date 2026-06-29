@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>车队用车结算</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --text:#172033;
+      --muted:#7c879e;
+      --line:#e5eaf2;
+      --blue:#5f83d8;
+      --green:#29a85a;
+      --green-bg:#eefaf2;
+      --yellow:#fff1a8;
+      --yellow-card:#fffdf2;
+      --danger:#d94b4b;
+      --shadow:0 2px 10px rgba(28,45,79,.06);
+    }
+    *{box-sizing:border-box;max-width:100%}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif}
+    body{overflow-x:hidden}
+    button,input,select,textarea{font:inherit}
+    button{touch-action:manipulation}
+    .app{width:100%;max-width:560px;margin:0 auto;padding:14px 12px calc(94px + env(safe-area-inset-bottom))}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 12px}
+    .topbar h1{font-size:20px;line-height:1.25;margin:0;font-weight:800;letter-spacing:.2px}
+    .topbar .sub{font-size:11px;color:var(--muted);margin-top:3px}
+    .icon-btn{border:1px solid var(--line);background:#fff;border-radius:10px;min-width:38px;height:38px;padding:0 10px;color:var(--blue);font-weight:700}
+    .select-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow)}
+    .panel-label{font-size:12px;color:var(--muted);margin-bottom:7px}
+    .select-row{display:grid;grid-template-columns:minmax(0,1fr) 42px;gap:8px}
+    #teamSelect{width:100%;height:44px;border:2px solid #171717;border-radius:7px;background:#fff;padding:0 36px 0 11px;font-size:15px;color:var(--text);outline:none}
+    .add-team{height:44px;border:0;border-radius:9px;background:#eef3ff;color:#416cc7;font-size:24px;line-height:1}
+    .summary{margin-top:12px;display:none}
+    .summary.show{display:block}
+    .team-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:4px 2px 9px}
+    .team-head h2{font-size:18px;margin:0;overflow-wrap:anywhere}
+    .team-head p{font-size:12px;color:var(--muted);margin:3px 0 0}
+    .pending-box{background:var(--green-bg);border:1px solid #d7f2e0;border-radius:14px;padding:13px 14px;box-shadow:var(--shadow)}
+    .pending-label{font-size:12px;color:#5b8068}
+    .pending-amount{font-size:28px;line-height:1.2;font-weight:800;color:var(--green);margin-top:2px;overflow-wrap:anywhere}
+    .mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}
+    .mini{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 8px;min-width:0}
+    .mini .k{font-size:10px;color:var(--muted);white-space:normal}
+    .mini .v{font-size:14px;font-weight:750;margin-top:4px;overflow-wrap:anywhere}
+    .section-title{display:flex;align-items:center;justify-content:space-between;margin:16px 2px 9px;gap:8px}
+    .section-title h3{font-size:15px;margin:0}
+    .section-title span{font-size:11px;color:var(--muted);text-align:right}
+    .records{display:grid;gap:9px}
+    .record-card{border:1px solid var(--line);border-radius:13px;background:var(--card);box-shadow:var(--shadow);padding:12px;min-width:0;transition:.15s}
+    .record-card.pending{background:var(--yellow-card);border-color:#f2df84}
+    .record-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:start}
+    .record-name{font-size:14px;font-weight:780;color:#476dbc;line-height:1.35;overflow-wrap:anywhere}
+    .record-date{font-size:11px;color:var(--muted);margin-top:2px}
+    .status-select{height:31px;border-radius:8px;padding:0 25px 0 9px;font-size:12px;font-weight:700;outline:none}
+    .status-select.pending{background:var(--yellow);border:1px solid #e8cb39;color:#6e5a00}
+    .status-select.settled{background:#fff;border:1px solid #dfe4ed;color:#526073}
+    .matter{margin-top:10px;border-top:1px dashed #dde3ed;padding-top:9px}
+    .matter-label,.note-label{font-size:10px;color:var(--muted);margin-bottom:3px}
+    .matter-text{font-size:13px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+    .money-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px}
+    .money-cell{border-radius:9px;background:rgba(255,255,255,.72);border:1px solid #edf0f5;padding:8px 7px;min-width:0}
+    .money-cell .label{font-size:10px;color:var(--muted)}
+    .money-cell .amount{font-size:13px;font-weight:800;margin-top:3px;overflow-wrap:anywhere}
+    .money-cell.price .amount{color:var(--green)}
+    .money-cell.profit .amount.negative{color:var(--danger)}
+    .note{margin-top:9px;background:rgba(245,247,251,.8);border-radius:9px;padding:8px 9px}
+    .note-text{font-size:12px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+    .record-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:9px}
+    .text-btn{border:0;background:transparent;padding:5px 4px;font-size:12px;color:#60708c}
+    .text-btn.delete{color:var(--danger)}
+    .empty{background:#fff;border:1px dashed #cfd7e5;border-radius:14px;padding:34px 18px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7}
+    .initial-empty{margin-top:14px}
+    .bottom-bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding:9px 12px calc(9px + env(safe-area-inset-bottom));z-index:20}
+    .bottom-inner{max-width:560px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:9px}
+    .primary-btn,.secondary-btn{height:46px;border-radius:11px;font-weight:800}
+    .primary-btn{border:0;background:#416fcd;color:#fff}
+    .secondary-btn{border:1px solid #cfd7e5;background:#fff;color:#53627e}
+    .primary-btn:disabled,.secondary-btn:disabled{opacity:.45}
+    .sheet-mask{position:fixed;inset:0;background:rgba(18,26,41,.38);display:none;align-items:flex-end;justify-content:center;z-index:50}
+    .sheet-mask.show{display:flex}
+    .sheet{width:100%;max-width:560px;background:#fff;border-radius:18px 18px 0 0;max-height:92vh;overflow:auto;padding:15px 14px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(0,0,0,.15)}
+    .sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .sheet-head h3{margin:0;font-size:17px}
+    .close-btn{width:36px;height:36px;border:0;background:#f0f3f8;border-radius:50%;font-size:22px;color:#5a667c}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .field{min-width:0}
+    .field.full{grid-column:1/-1}
+    .field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+    .field input,.field select,.field textarea{width:100%;border:1px solid #d9e0ea;border-radius:9px;background:#fff;padding:10px;font-size:14px;color:var(--text);outline:none}
+    .field input,.field select{height:42px}
+    .field textarea{min-height:84px;resize:vertical;line-height:1.45}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:#7392d8;box-shadow:0 0 0 3px rgba(95,131,216,.12)}
+    .save-btn{width:100%;height:46px;border:0;border-radius:11px;background:#416fcd;color:#fff;font-weight:800;margin-top:13px}
+    .footer-note{text-align:center;color:#9aa3b4;font-size:10px;margin-top:16px}
+    @media(max-width:360px){
+      .app{padding-left:9px;padding-right:9px}
+      .mini-grid,.money-row{gap:5px}
+      .mini{padding:9px 6px}
+      .mini .v,.money-cell .amount{font-size:12px}
+      .form-grid{grid-template-columns:1fr}
+      .field.full{grid-column:auto}
+      .bottom-inner{grid-template-columns:minmax(0,1fr) 94px}
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <h1>车队用车结算</h1>
+        <div class="sub">团队用车明细与累计待结算</div>
+      </div>
+      <button class="icon-btn" id="quickAdd" type="button" aria-label="新增记录">＋</button>
+    </header>
+
+    <section class="select-panel">
+      <div class="panel-label">选择团队</div>
+      <div class="select-row">
+        <select id="teamSelect" aria-label="选择团队">
+          <option value="">请选择团队</option>
+        </select>
+        <button class="add-team" id="addTeamBtn" type="button" aria-label="新增团队">＋</button>
+      </div>
+    </section>
+
+    <section class="summary" id="summary">
+      <div class="team-head">
+        <div>
+          <h2 id="teamName"></h2>
+          <p id="teamCount"></p>
+        </div>
+      </div>
+      <div class="pending-box">
+        <div class="pending-label">累计待结算</div>
+        <div class="pending-amount" id="pendingAmount">RM 0.00</div>
+      </div>
+      <div class="mini-grid">
+        <div class="mini"><div class="k">车队成本</div><div class="v" id="totalCost">RM 0.00</div></div>
+        <div class="mini"><div class="k">团队费用</div><div class="v" id="totalPrice">RM 0.00</div></div>
+        <div class="mini"><div class="k">累计差价</div><div class="v" id="totalProfit">RM 0.00</div></div>
+      </div>
+      <div class="section-title">
+        <h3>用车明细</h3>
+        <span id="recordMeta"></span>
+      </div>
+      <div class="records" id="records"></div>
+      <div class="footer-note">数据自动保存在本机浏览器</div>
+    </section>
+
+    <div class="empty initial-empty" id="initialEmpty">
+      请先点击上方选择框，选择一个团队。<br>选择后会显示该团队全部用车记录和累计待结算金额。
+    </div>
+  </main>
+
+  <div class="bottom-bar">
+    <div class="bottom-inner">
+      <button class="primary-btn" id="addRecordBtn" type="button" disabled>＋ 新增用车记录</button>
+      <button class="secondary-btn" id="exportBtn" type="button">导出 XLSX</button>
+    </div>
+  </div>
+
+  <div class="sheet-mask" id="formMask" role="dialog" aria-modal="true">
+    <form class="sheet" id="recordForm">
+      <div class="sheet-head">
+        <h3 id="formTitle">新增用车记录</h3>
+        <button class="close-btn" id="closeFormBtn" type="button" aria-label="关闭">×</button>
+      </div>
+      <input type="hidden" id="recordId">
+      <div class="form-grid">
+        <div class="field full">
+          <label for="formTeam">团队（商户）</label>
+          <select id="formTeam" required></select>
+        </div>
+        <div class="field">
+          <label for="formChannel">渠道（车队）</label>
+          <input id="formChannel" type="text" placeholder="例如：杨东顺" required>
+        </div>
+        <div class="field">
+          <label for="formDate">日期</label>
+          <input id="formDate" type="date" required>
+        </div>
+        <div class="field full">
+          <label for="formItem">办理事项</label>
+          <input id="formItem" type="text" placeholder="例如：接机、保关" required>
+        </div>
+        <div class="field">
+          <label for="formCost">车队成本（RM）</label>
+          <input id="formCost" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00">
+        </div>
+        <div class="field">
+          <label for="formPrice">团队费用（RM）</label>
+          <input id="formPrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00">
+        </div>
+        <div class="field full">
+          <label for="formNote">详细备注（去了哪里、做了什么）</label>
+          <textarea id="formNote" placeholder="例如：机场接人后送到市中心酒店"></textarea>
+        </div>
+        <div class="field full">
+          <label for="formStatus">结算状态</label>
+          <select id="formStatus">
+            <option value="未结算">未结算</option>
+            <option value="已结算">已结算</option>
+          </select>
+        </div>
+      </div>
+      <button class="save-btn" type="submit">保存记录</button>
+    </form>
+  </div>
+
+  <script>
+    const SEED_TEAMS = ["泽哥", "得麦A栋", "得麦B栋", "赛城新点31", "8号", "斌哥歪总", "耀总", "日本", "Puchong 24", "成", "生活A栋 大帅", "先家8号", "阿Q 魏"];
+    const SEED_RECORDS = [{"id": "seed-1", "team": "泽哥", "channel": "关口", "item": "保关", "cost": 0, "price": 1600.0, "date": "2026-06-25", "note": "", "status": "未结算"}, {"id": "seed-2", "team": "泽哥", "channel": "钱多多", "item": "接机", "cost": 0, "price": 240.0, "date": "2026-06-25", "note": "", "status": "未结算"}, {"id": "seed-3", "team": "得麦A栋", "channel": "瘦强", "item": "单程去Velocity Nsk和回", "cost": 140.0, "price": 0.0, "date": "2026-06-21", "note": "车队备注：单程去Velocity Nsk和回\n🚗140", "status": "未结算"}, {"id": "seed-4", "team": "得麦A栋", "channel": "瘦强", "item": "The Mines公寓A栋 \n2小时30分 去Nsk帮忙买菜和肉\n🚗210\n⭕️报销541.3", "cost": 681.3, "price": 751.3, "date": "2026-06-28", "note": "车队备注：The Mines公寓A栋 \n2小时30分 去Nsk帮忙买菜和肉\n🚗140\n⭕️报销541.3", "status": "未结算"}, {"id": "seed-5", "team": "得麦B栋", "channel": "杨东顺", "item": "买菜去红楼\n3小时车费：\n买东格啊里：150\n菜钱：593", "cost": 743.0, "price": 0.0, "date": "2026-06-26", "note": "车队备注：买菜去红楼\n3小时车费：150\n买东格啊里：150\n菜钱：593", "status": "未结算"}, {"id": "seed-6", "team": "赛城新点31", "channel": "瘦强", "item": "赛城新点31 蓝天\n买新的锁和换大门锁\n🚗\n报销59\n工具报销 7.7", "cost": 126.7, "price": 0.0, "date": "2026-06-24", "note": "车队备注：赛城新点31 蓝天\n买新的锁和换大门锁\n🚗60\n报销59\n工具报销 7.7", "status": "未结算"}, {"id": "seed-7", "team": "赛城新点31", "channel": "瘦强", "item": "1小时30分 Diy买东西和送过去", "cost": 85.0, "price": 0.0, "date": "2026-06-27", "note": "", "status": "未结算"}, {"id": "seed-8", "team": "斌哥歪总", "channel": "瘦强", "item": "歪总别墅\n送护照和Nsk接人回新点", "cost": 50.0, "price": 0.0, "date": "2026-06-22", "note": "车队备注：歪总别墅\n送护照和Nsk接人回新点\n🚗50\n原团队栏：歪总别墅", "status": "未结算"}, {"id": "seed-9", "team": "斌哥歪总", "channel": "瘦强", "item": "歪总别墅\n临时通知 接人Nsk去新点", "cost": 50.0, "price": 0.0, "date": "2026-06-22", "note": "车队备注：歪总别墅\n临时通知 接人Nsk去新点\n🚗50\n原团队栏：歪总别墅", "status": "未结算"}, {"id": "seed-10", "team": "斌哥歪总", "channel": "瘦强", "item": "7小时 旧点接去古仔街的Nsk,在送人去188,过后去文良港的酒店接人回去旧点(下班高峰) 在去Nsk接回来新点, \n在拉货回去旧点, 载桌子来新点, 新点等斌哥谈好事情在送回旧点", "cost": 385.0, "price": 0.0, "date": "2026-06-23", "note": "原团队栏：歪总", "status": "未结算"}, {"id": "seed-11", "team": "斌哥歪总", "channel": "瘦强", "item": "歪总别墅\n奶茶店拉设备", "cost": 50.0, "price": 0.0, "date": "2026-06-24", "note": "车队备注：歪总别墅\n奶茶店拉设备\n🚗50\n原团队栏：歪总", "status": "未结算"}, {"id": "seed-12", "team": "斌哥歪总", "channel": "瘦强", "item": "歪总别墅\n1小时30分 等猪肉切好 在拉去新点和旧点", "cost": 85.0, "price": 120.0, "date": "2026-06-26", "note": "车队备注：歪总别墅\n1小时30分 等猪肉切好 在拉去新点和旧点\n🚗85\n原团队栏：歪总", "status": "未结算"}, {"id": "seed-13", "team": "斌哥歪总", "channel": "未填写渠道", "item": "歪总别墅\n3小时30分 旧点接去Nsk,在去新点接去Nsk,来胖强家拿包裹,在去Nsk接回旧点,在去Nsk接回新点", "cost": 195.0, "price": 320.0, "date": "2026-06-26", "note": "车队备注：歪总别墅\n3小时30分 旧点接去Nsk,在去新点接去Nsk,来胖强家拿包裹,在去Nsk接回旧点,在去Nsk接回新点\n🚗195\n原团队栏：歪总", "status": "未结算"}, {"id": "seed-14", "team": "斌哥歪总", "channel": "瘦强", "item": "5小时 旧点接人和拉东西来新点,新点接人来Nsk和理发, Nsk接人回去新点,在去旧点接人来Nsk和理发, Nsk接人回去新点,回来Nsk接人回去旧点,在过来Nsk接人和拉货去新点,在送回去旧点", "cost": 275.0, "price": 400.0, "date": "2026-06-28", "note": "原团队栏：歪总", "status": "未结算"}, {"id": "seed-15", "team": "斌哥歪总", "channel": "未填写渠道", "item": "签证RM 1800", "cost": 0, "price": 1800.0, "date": "2026-06-28", "note": "原团队栏：歪总", "status": "未结算"}, {"id": "seed-16", "team": "耀总", "channel": "瘦强", "item": "凌晨\n接机去士毛月接一个人在送去吉隆坡市中心的酒店 南去东南在去北\n🚗", "cost": 230.0, "price": 0.0, "date": "2026-06-20", "note": "车队备注：凌晨\n接机去士毛月接一个人在送去吉隆坡市中心的酒店 南去东南在去北\n🚗230", "status": "未结算"}, {"id": "seed-17", "team": "日本", "channel": "胖强", "item": "🔥22/6 星期一\n日本队 胖强\n4小时 去Nilai Aeon买日常用品去旧点\n4小时 去赛城商场买日常用品去新点\n总共8小时", "cost": 440.0, "price": 0.0, "date": "2026-06-22", "note": "车队备注：4小时 去Nilai Aeon买日常用品去旧点\n4小时 去赛城商场买日常用品去新点\n总共8小时\n🚗440\n原团队栏：日本队", "status": "未结算"}, {"id": "seed-18", "team": "日本", "channel": "瘦强", "item": "🔥24/6 星期三\n日本队\n2小时 去超市买厕纸,纸巾和换煤气\n车费 \n报销61.5\n煤气报销26.6", "cost": 198.1, "price": 0.0, "date": "2026-06-24", "note": "车队备注：🔥24/6 星期三\n日本队\n2小时 去超市买厕纸,纸巾和换煤气\n🚗110\n⭕️报销61.5\n⭕️煤气报销26.6\n原团队栏：日本队", "status": "未结算"}, {"id": "seed-19", "team": "日本", "channel": "未填写渠道", "item": "旧点接来新点", "cost": 60.0, "price": 0.0, "date": "2026-06-24", "note": "车队备注：旧点接来新点\n🚗60", "status": "未结算"}, {"id": "seed-20", "team": "日本", "channel": "未填写渠道", "item": "Subang接来新点", "cost": 100.0, "price": 0.0, "date": "2026-06-24", "note": "车队备注：Subang接来新点\n🚗100", "status": "未结算"}, {"id": "seed-21", "team": "阿Q 魏", "channel": "未填写渠道", "item": "保关", "cost": 0, "price": 1000.0, "date": "2026-06-28", "note": "", "status": "未结算"}, {"id": "seed-22", "team": "阿Q 魏", "channel": "杨东顺", "item": "接机", "cost": 90.0, "price": 180.0, "date": "2026-06-28", "note": "", "status": "未结算"}];
+    const STORE_KEY = "fleet-mobile-settlement-v2";
+
+    const state = loadState();
+    let selectedTeam = "";
+    let editingId = "";
+
+    const teamSelect = document.getElementById("teamSelect");
+    const formTeam = document.getElementById("formTeam");
+    const summary = document.getElementById("summary");
+    const initialEmpty = document.getElementById("initialEmpty");
+    const recordsEl = document.getElementById("records");
+    const addRecordBtn = document.getElementById("addRecordBtn");
+    const formMask = document.getElementById("formMask");
+    const recordForm = document.getElementById("recordForm");
+
+    function loadState(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(STORE_KEY));
+        if(saved && Array.isArray(saved.teams) && Array.isArray(saved.records)){
+          return saved;
+        }
+      }catch(e){}
+      return {teams:[...SEED_TEAMS], records:SEED_RECORDS.map(x=>({...x}))};
+    }
+
+    function saveState(){
+      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    }
+
+    function money(value){
+      const n = Number(value || 0);
+      return "RM " + n.toLocaleString("en-MY",{minimumFractionDigits:2,maximumFractionDigits:2});
+    }
+
+    function formatDate(value){
+      if(!value) return "未填写日期";
+      const p = String(value).split("-");
+      if(p.length===3) return `${Number(p[0])}/${Number(p[1])}/${Number(p[2])}日`;
+      return value;
+    }
+
+    function escapeHtml(value){
+      return String(value ?? "").replace(/[&<>"']/g, s=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[s]));
+    }
+
+    function newId(){
+      return "r-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,7);
+    }
+
+    function todayISO(){
+      const d = new Date();
+      const local = new Date(d.getTime()-d.getTimezoneOffset()*60000);
+      return local.toISOString().slice(0,10);
+    }
+
+    function fillTeamOptions(){
+      const old = teamSelect.value;
+      teamSelect.innerHTML = '<option value="">请选择团队</option>' +
+        state.teams.map(t=>`<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
+      formTeam.innerHTML = state.teams.map(t=>`<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
+      if(state.teams.includes(old)) teamSelect.value = old;
+    }
+
+    function render(){
+      fillTeamOptions();
+      teamSelect.value = selectedTeam;
+      if(!selectedTeam){
+        summary.classList.remove("show");
+        initialEmpty.style.display = "block";
+        addRecordBtn.disabled = true;
+        return;
+      }
+      initialEmpty.style.display = "none";
+      summary.classList.add("show");
+      addRecordBtn.disabled = false;
+
+      const list = state.records
+        .filter(r=>r.team===selectedTeam)
+        .sort((a,b)=>(b.date||"").localeCompare(a.date||"") || String(b.id).localeCompare(String(a.id)));
+
+      const pending = list.filter(r=>r.status!=="已结算");
+      const totalCost = list.reduce((s,r)=>s+Number(r.cost||0),0);
+      const totalPrice = list.reduce((s,r)=>s+Number(r.price||0),0);
+      const pendingAmount = pending.reduce((s,r)=>s+Number(r.price||0),0);
+
+      document.getElementById("teamName").textContent = selectedTeam;
+      document.getElementById("teamCount").textContent = `共 ${list.length} 笔记录`;
+      document.getElementById("pendingAmount").textContent = money(pendingAmount);
+      document.getElementById("totalCost").textContent = money(totalCost);
+      document.getElementById("totalPrice").textContent = money(totalPrice);
+      document.getElementById("totalProfit").textContent = money(totalPrice-totalCost);
+      document.getElementById("recordMeta").textContent = `未结算 ${pending.length} 笔 · 已结算 ${list.length-pending.length} 笔`;
+
+      if(!list.length){
+        recordsEl.innerHTML = '<div class="empty">这个团队还没有用车记录。<br>点击下方“新增用车记录”开始填写。</div>';
+        return;
+      }
+
+      recordsEl.innerHTML = list.map(r=>{
+        const isPending = r.status!=="已结算";
+        const profit = Number(r.price||0)-Number(r.cost||0);
+        const note = r.note ? `
+          <div class="note">
+            <div class="note-label">详细备注</div>
+            <div class="note-text">${escapeHtml(r.note)}</div>
+          </div>` : "";
+        return `
+          <article class="record-card ${isPending?'pending':''}" data-id="${escapeHtml(r.id)}">
+            <div class="record-top">
+              <div>
+                <div class="record-name">${escapeHtml(r.channel)}-${escapeHtml(r.team)}</div>
+                <div class="record-date">${escapeHtml(formatDate(r.date))}</div>
+              </div>
+              <select class="status-select ${isPending?'pending':'settled'}" data-action="status" data-id="${escapeHtml(r.id)}" aria-label="结算状态">
+                <option value="未结算" ${isPending?'selected':''}>未结算</option>
+                <option value="已结算" ${!isPending?'selected':''}>已结算</option>
+              </select>
+            </div>
+            <div class="matter">
+              <div class="matter-label">办理事项</div>
+              <div class="matter-text">${escapeHtml(r.item)}</div>
+            </div>
+            <div class="money-row">
+              <div class="money-cell">
+                <div class="label">车队成本</div>
+                <div class="amount">${money(r.cost)}</div>
+              </div>
+              <div class="money-cell price">
+                <div class="label">团队费用</div>
+                <div class="amount">${money(r.price)}</div>
+              </div>
+              <div class="money-cell profit">
+                <div class="label">差价</div>
+                <div class="amount ${profit<0?'negative':''}">${money(profit)}</div>
+              </div>
+            </div>
+            ${note}
+            <div class="record-actions">
+              <button class="text-btn" type="button" data-action="edit" data-id="${escapeHtml(r.id)}">编辑</button>
+              <button class="text-btn delete" type="button" data-action="delete" data-id="${escapeHtml(r.id)}">删除</button>
+            </div>
+          </article>`;
+      }).join("");
+    }
+
+    function openForm(id=""){
+      editingId = id;
+      document.getElementById("recordId").value = id;
+      document.getElementById("formTitle").textContent = id ? "编辑用车记录" : "新增用车记录";
+      if(id){
+        const r = state.records.find(x=>x.id===id);
+        if(!r) return;
+        document.getElementById("formTeam").value = r.team;
+        document.getElementById("formChannel").value = r.channel;
+        document.getElementById("formDate").value = r.date || "";
+        document.getElementById("formItem").value = r.item;
+        document.getElementById("formCost").value = r.cost ?? "";
+        document.getElementById("formPrice").value = r.price ?? "";
+        document.getElementById("formNote").value = r.note || "";
+        document.getElementById("formStatus").value = r.status || "未结算";
+      }else{
+        recordForm.reset();
+        document.getElementById("formTeam").value = selectedTeam || state.teams[0] || "";
+        document.getElementById("formDate").value = todayISO();
+        document.getElementById("formStatus").value = "未结算";
+      }
+      formMask.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeForm(){
+      formMask.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+
+    teamSelect.addEventListener("change",()=>{
+      selectedTeam = teamSelect.value;
+      render();
+      window.scrollTo({top:0,behavior:"smooth"});
+    });
+
+    document.getElementById("addTeamBtn").addEventListener("click",()=>{
+      const name = prompt("请输入新团队名称");
+      if(!name) return;
+      const clean = name.trim();
+      if(!clean) return;
+      if(!state.teams.includes(clean)){
+        state.teams.push(clean);
+        saveState();
+      }
+      selectedTeam = clean;
+      render();
+    });
+
+    document.getElementById("quickAdd").addEventListener("click",()=>{
+      if(!selectedTeam){
+        teamSelect.focus();
+        return;
+      }
+      openForm();
+    });
+    addRecordBtn.addEventListener("click",()=>openForm());
+    document.getElementById("closeFormBtn").addEventListener("click",closeForm);
+    formMask.addEventListener("click",e=>{if(e.target===formMask) closeForm()});
+
+    recordForm.addEventListener("submit",e=>{
+      e.preventDefault();
+      const payload = {
+        id: editingId || newId(),
+        team: document.getElementById("formTeam").value,
+        channel: document.getElementById("formChannel").value.trim(),
+        date: document.getElementById("formDate").value,
+        item: document.getElementById("formItem").value.trim(),
+        cost: Number(document.getElementById("formCost").value || 0),
+        price: Number(document.getElementById("formPrice").value || 0),
+        note: document.getElementById("formNote").value.trim(),
+        status: document.getElementById("formStatus").value
+      };
+      if(editingId){
+        const idx = state.records.findIndex(x=>x.id===editingId);
+        if(idx>=0) state.records[idx] = payload;
+      }else{
+        state.records.push(payload);
+      }
+      selectedTeam = payload.team;
+      saveState();
+      closeForm();
+      render();
+    });
+
+    recordsEl.addEventListener("change",e=>{
+      const el = e.target.closest('[data-action="status"]');
+      if(!el) return;
+      const r = state.records.find(x=>x.id===el.dataset.id);
+      if(!r) return;
+      r.status = el.value;
+      saveState();
+      render();
+    });
+
+    recordsEl.addEventListener("click",e=>{
+      const btn = e.target.closest("[data-action]");
+      if(!btn || btn.dataset.action==="status") return;
+      const id = btn.dataset.id;
+      if(btn.dataset.action==="edit") openForm(id);
+      if(btn.dataset.action==="delete"){
+        if(confirm("确定删除这条用车记录吗？")){
+          state.records = state.records.filter(x=>x.id!==id);
+          saveState();
+          render();
+        }
+      }
+    });
+
+    document.getElementById("exportBtn").addEventListener("click",async()=>{
+      const btn = document.getElementById("exportBtn");
+      btn.disabled = true;
+      btn.textContent = "处理中…";
+      try{
+        if(!window.XLSX){
+          await loadXLSX();
+        }
+        const rows = state.records
+          .slice()
+          .sort((a,b)=>a.team.localeCompare(b.team,"zh-CN") || (b.date||"").localeCompare(a.date||""))
+          .map(r=>({
+            "团队":r.team,
+            "渠道/车队":r.channel,
+            "办理事项":r.item,
+            "车队成本(RM)":Number(r.cost||0),
+            "团队费用(RM)":Number(r.price||0),
+            "差价(RM)":Number(r.price||0)-Number(r.cost||0),
+            "结算状态":r.status,
+            "日期":r.date,
+            "备注":r.note||""
+          }));
+        const book = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(book, XLSX.utils.json_to_sheet(rows), "全部记录");
+        state.teams.forEach(team=>{
+          const sub = rows.filter(r=>r["团队"]===team);
+          if(!sub.length) return;
+          const safe = team.replace(/[\\/?*[\]:]/g," ").slice(0,31) || "团队";
+          XLSX.utils.book_append_sheet(book, XLSX.utils.json_to_sheet(sub), safe);
+        });
+        XLSX.writeFile(book, `车队用车结算_${new Date().toISOString().slice(0,10)}.xlsx`);
+      }catch(err){
+        alert("导出失败，请确认手机已经联网后再试。");
+      }finally{
+        btn.disabled = false;
+        btn.textContent = "导出 XLSX";
+      }
+    });
+
+    function loadXLSX(){
+      return new Promise((resolve,reject)=>{
+        const s=document.createElement("script");
+        s.src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js";
+        s.onload=resolve;
+        s.onerror=reject;
+        document.head.appendChild(s);
+      });
+    }
+
+    fillTeamOptions();
+    render();
+  </script>
+</body>
+</html>
