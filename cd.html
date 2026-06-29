@@ -33,8 +33,8 @@
     .smart-label{display:flex;align-items:center;gap:5px;font-size:13px;color:#6d778b;margin-bottom:7px}
     .required{color:#e1562a;font-size:18px;line-height:1}
     .smart-field input,.smart-field select,.smart-field textarea{width:100%;border:0;background:transparent;color:var(--text);outline:none;font-size:14px;padding:3px 0;line-height:1.45}
-    .smart-field textarea{min-height:54px;resize:vertical}
-    .paste-box{width:100%;min-height:135px;margin-top:12px;border:1px solid #d7dde8;border-radius:8px;background:#fff;padding:11px;font-size:13px;line-height:1.55;resize:vertical;outline:none}
+    .smart-field textarea{min-height:72px;resize:vertical}
+    .paste-box{width:100%;min-height:132px;margin-top:12px;border:1px solid #d7dde8;border-radius:8px;background:#fff;padding:11px;font-size:13px;line-height:1.55;resize:vertical;outline:none}
     .paste-box:focus{border-color:#7392d8;box-shadow:0 0 0 3px rgba(95,131,216,.10)}
     .smart-error{display:none;margin-top:8px;font-size:12px;color:#b33d3d;line-height:1.45}
     .smart-error.show{display:block}
@@ -47,23 +47,36 @@
     .pending-box{background:var(--green-bg);border:1px solid #d7f2e0;border-radius:14px;padding:13px 14px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;gap:12px}
     .pending-info{min-width:0}.pending-label{font-size:12px;color:#5b8068}.pending-amount{font-size:28px;line-height:1.2;font-weight:800;color:var(--green);margin-top:2px;overflow-wrap:anywhere}
     .settle-all-btn{flex:0 0 auto;height:38px;border:1px solid #97d7aa;border-radius:10px;background:#fff;color:#238447;font-size:13px;font-weight:800;padding:0 14px}.settle-all-btn:disabled{opacity:.45}
-    .mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}
-    .mini{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 8px;min-width:0}.mini .k{font-size:10px;color:var(--muted)}.mini .v{font-size:14px;font-weight:750;margin-top:4px;overflow-wrap:anywhere}
-    .section-title{display:flex;align-items:center;justify-content:space-between;margin:16px 2px 9px;gap:8px}.section-title h3{font-size:15px;margin:0}.section-title span{font-size:11px;color:var(--muted);text-align:right}
+    #pendingDetails{margin-top:10px}
     .records,.history-list{display:grid;gap:9px}
     .record-card{border:1px solid var(--line);border-radius:13px;background:var(--card);box-shadow:var(--shadow);padding:12px;min-width:0}.record-card.pending{background:var(--yellow-card);border-color:#f2df84}
     .record-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:start}.record-name{font-size:14px;font-weight:780;color:#111827;line-height:1.4;overflow-wrap:anywhere}.record-date-inline{font-size:12px;color:#111827;font-weight:600;margin-left:6px;white-space:nowrap}
     .status-select{height:31px;border-radius:8px;padding:0 25px 0 9px;font-size:12px;font-weight:700;outline:none}.status-select.pending{background:var(--yellow);border:1px solid #e8cb39;color:#6e5a00}.status-select.settled{background:#fff;border:1px solid #dfe4ed;color:#526073}
-    .matter{margin-top:10px;border-top:1px dashed #dde3ed;padding-top:9px}.matter-label,.note-label{font-size:10px;color:var(--muted);margin-bottom:3px}.matter-text{font-size:13px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
     .money-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px}.money-cell{border-radius:9px;background:rgba(255,255,255,.72);border:1px solid #edf0f5;padding:8px 7px;min-width:0}.money-cell .label{font-size:10px;color:var(--muted)}.money-cell .amount{font-size:13px;font-weight:800;margin-top:3px;overflow-wrap:anywhere}.money-cell.price .amount{color:var(--green)}.money-cell.profit .amount.negative{color:var(--danger)}
-    .note{margin-top:9px;background:rgba(245,247,251,.8);border-radius:9px;padding:8px 9px}.note-text{font-size:12px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}.record-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:9px}.text-btn{border:0;background:transparent;padding:5px 4px;font-size:12px;color:#60708c}.text-btn.delete{color:var(--danger)}
+    .detail{margin-top:9px;background:rgba(245,247,251,.8);border-radius:9px;padding:8px 9px}.detail-label{font-size:10px;color:var(--muted);margin-bottom:4px}.detail-text{font-size:12px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+    .record-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:9px}.text-btn{border:0;background:transparent;padding:5px 4px;font-size:12px;color:#60708c}.text-btn.delete{color:var(--danger)}.text-btn.restore{color:#238447;font-weight:800}
     .empty{background:#fff;border:1px dashed #cfd7e5;border-radius:14px;padding:30px 18px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7}.footer-note{text-align:center;color:#9aa3b4;font-size:10px;margin-top:16px}
     .bottom-bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding:9px 12px calc(9px + env(safe-area-inset-bottom));z-index:20}.bottom-inner{max-width:560px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:9px}.primary-bottom,.secondary-btn{height:46px;border-radius:11px;font-weight:800}.primary-bottom{border:0;background:#9db5ea;color:#fff}.primary-bottom:disabled{opacity:.45}.secondary-btn{border:1px solid #cfd7e5;background:#fff;color:#53627e}.secondary-btn:disabled{opacity:.45}
-    .sheet-mask{position:fixed;inset:0;background:rgba(18,26,41,.38);display:none;align-items:flex-end;justify-content:center;z-index:50}.sheet-mask.show{display:flex}.sheet{width:100%;max-width:560px;background:#fff;border-radius:18px 18px 0 0;max-height:92vh;overflow:auto;padding:15px 14px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(0,0,0,.15)}
+    .sheet-mask{position:fixed;inset:0;background:rgba(18,26,41,.38);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:0}.sheet-mask.show{display:flex}.sheet{width:100%;max-width:560px;background:#fff;border-radius:18px 18px 0 0;max-height:92vh;overflow:auto;padding:15px 14px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(0,0,0,.15)}
+    .sheet-mask.centered{align-items:center;padding:16px}.sheet-mask.centered .sheet{border-radius:18px;max-height:82vh;padding:15px 14px 18px;box-shadow:0 16px 45px rgba(0,0,0,.22)}
+    .sheet-mask.price-mask{z-index:80}
     .sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.sheet-head h3{margin:0;font-size:17px}.close-btn{width:36px;height:36px;border:0;background:#f0f3f8;border-radius:50%;font-size:22px;color:#5a667c}
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{min-width:0}.field.full{grid-column:1/-1}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.field input,.field select,.field textarea{width:100%;border:1px solid #d9e0ea;border-radius:9px;background:#fff;padding:10px;font-size:14px;color:var(--text);outline:none}.field input,.field select{height:42px}.field textarea{min-height:84px;resize:vertical;line-height:1.45}.field input:focus,.field select:focus,.field textarea:focus{border-color:#7392d8;box-shadow:0 0 0 3px rgba(95,131,216,.12)}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{min-width:0}.field.full{grid-column:1/-1}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.field input,.field select,.field textarea{width:100%;border:1px solid #d9e0ea;border-radius:9px;background:#fff;padding:10px;font-size:14px;color:var(--text);outline:none}.field input,.field select{height:42px}.field textarea{min-height:108px;resize:vertical;line-height:1.45}.field input:focus,.field select:focus,.field textarea:focus{border-color:#7392d8;box-shadow:0 0 0 3px rgba(95,131,216,.12)}
     .save-btn{width:100%;height:46px;border:0;border-radius:11px;background:#416fcd;color:#fff;font-weight:800;margin-top:13px}
-    @media(max-width:360px){.app{padding-left:9px;padding-right:9px}.mini-grid,.money-row{gap:5px}.mini{padding:9px 6px}.mini .v,.money-cell .amount{font-size:12px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.bottom-inner{grid-template-columns:minmax(0,1fr) 102px}}
+    .price-summary{background:#f5f7fb;border-radius:11px;padding:10px 11px;font-size:12px;line-height:1.65;color:#53627e;margin-bottom:12px}.price-summary strong{color:#172033}
+    .price-input{width:100%;height:48px;border:1px solid #d9e0ea;border-radius:10px;padding:0 12px;font-size:18px;font-weight:800;outline:none}.price-input:focus{border-color:#7392d8;box-shadow:0 0 0 3px rgba(95,131,216,.12)}
+    .price-actions{display:grid;grid-template-columns:92px minmax(0,1fr);gap:9px;margin-top:13px}.cancel-btn{height:44px;border:1px solid #d6dce7;border-radius:10px;background:#fff;color:#63708a;font-weight:800}.confirm-btn{height:44px;border:0;border-radius:10px;background:#416fcd;color:#fff;font-weight:800}
+    .print-area{display:none}
+    @media(max-width:360px){.app{padding-left:9px;padding-right:9px}.money-row{gap:5px}.money-cell .amount{font-size:12px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.bottom-inner{grid-template-columns:minmax(0,1fr) 102px}}
+    @media print{
+      @page{size:A4;margin:12mm}
+      body{background:#fff!important;color:#111!important}
+      body>*:not(.print-area){display:none!important}
+      .print-area{display:block!important;width:100%;max-width:none;margin:0;padding:0;font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif}
+      .print-title{font-size:22px;font-weight:800;margin:0 0 4px}.print-sub{font-size:11px;color:#667085;margin-bottom:14px}
+      .print-total{border:1px solid #bfe5ca;background:#effaf2;border-radius:10px;padding:12px 14px;margin-bottom:12px}.print-total-label{font-size:11px;color:#5b8068}.print-total-value{font-size:24px;font-weight:800;color:#238447;margin-top:3px}
+      .print-record{border:1px solid #d9dee8;border-radius:10px;padding:11px 12px;margin-bottom:9px;break-inside:avoid}.print-record-head{font-size:13px;font-weight:800;margin-bottom:8px}.print-record-money{display:flex;justify-content:space-between;gap:12px;border-top:1px dashed #d9dee8;padding-top:8px;margin-top:6px}.print-record-money span:first-child{font-size:11px;color:#667085}.print-record-money strong{font-size:14px}.print-detail{background:#f6f7f9;border-radius:7px;padding:8px 9px;margin-top:8px;font-size:11px;line-height:1.55;white-space:pre-wrap}.print-footer{font-size:10px;color:#8c95a5;text-align:right;margin-top:12px}
+    }
   </style>
 </head>
 <body>
@@ -84,10 +97,10 @@
           <div class="smart-field"><div class="smart-label"><span class="required">*</span>日期</div><input id="homeDate" type="date"></div>
           <div class="smart-field"><div class="smart-label"><span class="required">*</span>车队</div><input id="homeChannel" type="text"></div>
           <div class="smart-field"><div class="smart-label"><span class="required">*</span>团队</div><select id="homeTeam"></select></div>
-          <div class="smart-field"><div class="smart-label"><span class="required">*</span>办理事项</div><textarea id="homeItem"></textarea></div>
+          <div class="smart-field"><div class="smart-label"><span class="required">*</span>用车详情</div><textarea id="homeItem"></textarea></div>
           <div class="smart-field"><div class="smart-label"><span class="required">*</span>费用</div><input id="homeFee" type="number" inputmode="decimal" min="0" step="0.01"></div>
         </div>
-        <textarea class="paste-box" id="homePaste" aria-label="粘贴用车模板" placeholder="日期：年/月/日&#10;车队：&#10;团队：&#10;用车记录：&#10;费用："></textarea>
+        <textarea class="paste-box" id="homePaste" aria-label="粘贴用车模板" placeholder="日期：年/月/日&#10;车队：&#10;团队：&#10;用车详情：&#10;费用："></textarea>
         <div class="smart-error" id="homeError"></div>
         <div class="smart-actions"><button class="upload-btn" id="homeUpload" type="button">上传</button></div>
       </div>
@@ -103,12 +116,6 @@
         <button class="settle-all-btn" id="settleAllBtn" type="button">已结算</button>
       </div>
       <div id="pendingDetails">
-        <div class="mini-grid">
-          <div class="mini"><div class="k">车队成本</div><div class="v" id="totalCost">RM 0.00</div></div>
-          <div class="mini"><div class="k">团队费用</div><div class="v" id="totalPrice">RM 0.00</div></div>
-          <div class="mini"><div class="k">累计差价</div><div class="v" id="totalProfit">RM 0.00</div></div>
-        </div>
-        <div class="section-title"><h3>用车明细</h3><span id="recordMeta"></span></div>
         <div class="records" id="records"></div>
         <div class="footer-note">数据自动保存在本机浏览器</div>
       </div>
@@ -117,7 +124,7 @@
 
   <div class="bottom-bar"><div class="bottom-inner">
     <button class="primary-bottom" id="newRecordBtn" type="button" disabled>＋ 新增用车记录</button>
-    <button class="secondary-btn" id="exportBtn" type="button">导出 XLSX</button>
+    <button class="secondary-btn" id="exportBtn" type="button" disabled>导出 PDF</button>
   </div></div>
 
   <div class="sheet-mask" id="newMask" role="dialog" aria-modal="true">
@@ -128,10 +135,10 @@
           <div class="smart-field"><div class="smart-label"><span class="required">*</span>日期</div><input id="newDate" type="date"></div>
           <div class="smart-field"><div class="smart-label"><span class="required">*</span>车队</div><input id="newChannel" type="text"></div>
           <div class="smart-field"><div class="smart-label"><span class="required">*</span>团队</div><select id="newTeam"></select></div>
-          <div class="smart-field"><div class="smart-label"><span class="required">*</span>办理事项</div><textarea id="newItem"></textarea></div>
+          <div class="smart-field"><div class="smart-label"><span class="required">*</span>用车详情</div><textarea id="newItem"></textarea></div>
           <div class="smart-field"><div class="smart-label"><span class="required">*</span>费用</div><input id="newFee" type="number" inputmode="decimal" min="0" step="0.01"></div>
         </div>
-        <textarea class="paste-box" id="newPaste" aria-label="粘贴用车模板" placeholder="日期：年/月/日&#10;车队：&#10;团队：&#10;用车记录：&#10;费用："></textarea>
+        <textarea class="paste-box" id="newPaste" aria-label="粘贴用车模板" placeholder="日期：年/月/日&#10;车队：&#10;团队：&#10;用车详情：&#10;费用："></textarea>
         <div class="smart-error" id="newError"></div>
         <div class="smart-actions"><button class="upload-btn" id="newUpload" type="button">上传</button></div>
       </div>
@@ -146,22 +153,34 @@
         <div class="field full"><label for="editTeam">团队</label><select id="editTeam" required></select></div>
         <div class="field"><label for="editChannel">车队</label><input id="editChannel" type="text" required></div>
         <div class="field"><label for="editDate">日期</label><input id="editDate" type="date" required></div>
-        <div class="field full"><label for="editItem">办理事项</label><input id="editItem" type="text" required></div>
         <div class="field"><label for="editCost">车队成本</label><input id="editCost" type="number" inputmode="decimal" min="0" step="0.01"></div>
         <div class="field"><label for="editPrice">团队费用</label><input id="editPrice" type="number" inputmode="decimal" min="0" step="0.01"></div>
-        <div class="field full"><label for="editNote">详情</label><textarea id="editNote"></textarea></div>
+        <div class="field full"><label for="editDetail">详情</label><textarea id="editDetail" required></textarea></div>
         <div class="field full"><label for="editStatus">结算状态</label><select id="editStatus"><option value="未结算">未结算</option><option value="已结算">已结算</option></select></div>
       </div>
       <button class="save-btn" type="submit">保存记录</button>
     </form>
   </div>
 
-  <div class="sheet-mask" id="historyMask" role="dialog" aria-modal="true">
-    <div class="sheet">
+  <div class="sheet-mask centered" id="historyMask" role="dialog" aria-modal="true">
+    <div class="sheet history-sheet">
       <div class="sheet-head"><h3 id="historyTitle">结算记录</h3><button class="close-btn" id="closeHistoryBtn" type="button" aria-label="关闭">×</button></div>
       <div class="history-list" id="historyList"></div>
     </div>
   </div>
+
+  <div class="sheet-mask centered price-mask" id="priceMask" role="dialog" aria-modal="true">
+    <form class="sheet" id="priceForm">
+      <div class="sheet-head"><h3>填写团队费用</h3><button class="close-btn" id="closePriceBtn" type="button" aria-label="关闭">×</button></div>
+      <div class="price-summary" id="priceSummary"></div>
+      <label class="panel-label" for="teamPriceInput">团队费用</label>
+      <input class="price-input" id="teamPriceInput" type="number" inputmode="decimal" min="0" step="0.01" placeholder="请输入团队费用" required>
+      <div class="smart-error" id="priceError"></div>
+      <div class="price-actions"><button class="cancel-btn" id="cancelPriceBtn" type="button">取消</button><button class="confirm-btn" type="submit">确认并生成</button></div>
+    </form>
+  </div>
+
+  <section class="print-area" id="printArea" aria-hidden="true"></section>
 
   <script>
     const SEED_TEAMS = ["泽哥", "得麦A栋", "得麦B栋", "赛城新点31", "8号", "斌哥歪总", "耀总", "日本", "Puchong 24", "成", "生活A栋 大帅", "先家8号", "阿Q 魏"];
@@ -169,11 +188,12 @@
     const STORE_KEY = "fleet-mobile-settlement-v2";
     const state = loadState();
     let selectedTeam = "";
+    let pendingUpload = null;
 
     const $ = id=>document.getElementById(id);
     const teamSelect=$("teamSelect"), summary=$("summary"), homeEntry=$("homeEntry"), recordsEl=$("records");
-    const pendingDetails=$("pendingDetails"), settleAllBtn=$("settleAllBtn"), newRecordBtn=$("newRecordBtn");
-    const newMask=$("newMask"), editMask=$("editMask"), historyMask=$("historyMask");
+    const pendingDetails=$("pendingDetails"), settleAllBtn=$("settleAllBtn"), newRecordBtn=$("newRecordBtn"), exportBtn=$("exportBtn");
+    const newMask=$("newMask"), editMask=$("editMask"), historyMask=$("historyMask"), priceMask=$("priceMask");
 
     function loadState(){
       try{const saved=JSON.parse(localStorage.getItem(STORE_KEY));if(saved&&Array.isArray(saved.teams)&&Array.isArray(saved.records))return saved}catch(e){}
@@ -193,15 +213,19 @@
         date:normalizeDateInput(t.match(/^\s*日期\s*[:：]\s*(.+)$/m)?.[1]||""),
         channel:String(t.match(/^\s*(?:车队|渠道)\s*[:：]\s*(.+)$/m)?.[1]||"").trim(),
         team:String(t.match(/^\s*团队\s*[:：]\s*(.+)$/m)?.[1]||"").trim(),
-        item:String(t.match(/^\s*(?:用车记录|办理事项)\s*[:：]\s*([\s\S]*?)(?=^\s*费用\s*[:：])/m)?.[1]||"").trim(),
+        item:String(t.match(/^\s*(?:用车详情|用车记录|办理事项)\s*[:：]\s*([\s\S]*?)(?=^\s*费用\s*[:：])/m)?.[1]||"").trim(),
         fee:parseFee(t.match(/^\s*费用\s*[:：]\s*(.+)$/m)?.[1]||"")
       }
+    }
+    function getDetail(r){
+      const item=String(r.item||"").trim(),note=String(r.note||"").trim();
+      if(!note)return item;if(!item)return note;if(note.includes(item))return note;if(item.includes(note))return item;return item+"\n"+note
     }
     function fillTeamOptions(){
       const opts=state.teams.map(t=>`<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
       teamSelect.innerHTML='<option value="">请选择团队</option>'+opts;
       ["homeTeam","newTeam","editTeam"].forEach(id=>{$(id).innerHTML='<option value="">请选择团队</option>'+opts});
-      teamSelect.value=selectedTeam;
+      teamSelect.value=selectedTeam
     }
     function ensureTeam(name){if(name&&!state.teams.includes(name))state.teams.push(name)}
 
@@ -214,45 +238,46 @@
         if(r.team){ensureTeam(r.team);fillTeamOptions();ids.team.value=r.team}
         if(r.item)ids.item.value=r.item;
         if(Number.isFinite(r.fee))ids.fee.value=r.fee;
-        ids.error.className="smart-error";ids.error.textContent="";
+        ids.error.className="smart-error";ids.error.textContent=""
       });
       ids.upload.addEventListener("click",()=>{
         const payload={date:ids.date.value,channel:ids.channel.value.trim(),team:ids.team.value,item:ids.item.value.trim(),fee:Number(ids.fee.value)};
-        const missing=[];if(!payload.date)missing.push("日期");if(!payload.channel)missing.push("车队");if(!payload.team)missing.push("团队");if(!payload.item)missing.push("办理事项");if(!Number.isFinite(payload.fee)||payload.fee<0)missing.push("费用");
+        const missing=[];if(!payload.date)missing.push("日期");if(!payload.channel)missing.push("车队");if(!payload.team)missing.push("团队");if(!payload.item)missing.push("用车详情");if(!Number.isFinite(payload.fee)||payload.fee<0)missing.push("费用");
         if(missing.length){ids.error.textContent="请填写："+missing.join("、");ids.error.className="smart-error show";return}
-        ensureTeam(payload.team);
-        state.records.push({id:newId(),team:payload.team,channel:payload.channel,date:payload.date,item:payload.item,cost:payload.fee,price:0,note:"",status:"未结算"});
-        saveState();selectedTeam=payload.team;clearSmart(prefix);if(prefix==="new")closeMask(newMask);render();window.scrollTo({top:0,behavior:"smooth"})
-      });
+        pendingUpload={prefix,payload};
+        $("priceSummary").innerHTML=`<strong>${escapeHtml(payload.channel)}-${escapeHtml(payload.team)}</strong><br>${escapeHtml(formatDate(payload.date))}<br>车队成本：${escapeHtml(money(payload.fee))}`;
+        $("teamPriceInput").value="";$("priceError").className="smart-error";$("priceError").textContent="";
+        openMask(priceMask);setTimeout(()=>$("teamPriceInput").focus(),100)
+      })
     }
     function clearSmart(prefix){["Date","Channel","Team","Item","Fee","Paste"].forEach(s=>{const el=$(prefix+s);if(el)el.value=""});$(prefix+"Error").className="smart-error";$(prefix+"Error").textContent=""}
 
     function render(){
       fillTeamOptions();teamSelect.value=selectedTeam;
-      if(!selectedTeam){summary.classList.remove("show");homeEntry.style.display="block";newRecordBtn.disabled=true;return}
-      homeEntry.style.display="none";summary.classList.add("show");newRecordBtn.disabled=false;
+      if(!selectedTeam){summary.classList.remove("show");homeEntry.style.display="block";newRecordBtn.disabled=true;exportBtn.disabled=true;return}
+      homeEntry.style.display="none";summary.classList.add("show");newRecordBtn.disabled=false;exportBtn.disabled=false;
       const list=state.records.filter(r=>r.team===selectedTeam).sort((a,b)=>(b.date||"").localeCompare(a.date||"")||String(b.id).localeCompare(String(a.id)));
       const pending=list.filter(r=>r.status!=="已结算");
       const settled=list.filter(r=>r.status==="已结算");
-      const totalCost=pending.reduce((s,r)=>s+Number(r.cost||0),0),totalPrice=pending.reduce((s,r)=>s+Number(r.price||0),0);
+      const totalPrice=pending.reduce((s,r)=>s+Number(r.price||0),0);
       $("teamName").textContent=selectedTeam;$("teamCount").textContent=`共 ${list.length} 笔记录`;
-      $("pendingAmount").textContent=money(totalPrice);$("totalCost").textContent=money(totalCost);$("totalPrice").textContent=money(totalPrice);$("totalProfit").textContent=money(totalPrice-totalCost);
-      $("recordMeta").textContent=`未结算 ${pending.length} 笔 · 已结算 ${settled.length} 笔`;settleAllBtn.disabled=pending.length===0;pendingDetails.style.display=pending.length?"block":"none";
+      $("pendingAmount").textContent=money(totalPrice);settleAllBtn.disabled=pending.length===0;pendingDetails.style.display=pending.length?"block":"none";
       $("historyBtn").textContent=`结算记录${settled.length?` ${settled.length}`:""}`;
-      recordsEl.innerHTML=pending.length?pending.map(recordCard).join(""):"";
+      recordsEl.innerHTML=pending.length?pending.map(recordCard).join(""):""
     }
+    function detailBlock(r){const detail=getDetail(r);return detail?`<div class="detail"><div class="detail-label">详情</div><div class="detail-text">${escapeHtml(detail)}</div></div>`:""}
     function recordCard(r){
-      const profit=Number(r.price||0)-Number(r.cost||0),note=r.note?`<div class="note"><div class="note-label">详情</div><div class="note-text">${escapeHtml(r.note)}</div></div>`:"";
-      return `<article class="record-card pending" data-id="${escapeHtml(r.id)}"><div class="record-top"><div class="record-name">${escapeHtml(r.channel)}-${escapeHtml(r.team)}<span class="record-date-inline">${escapeHtml(formatDate(r.date))}</span></div><select class="status-select pending" data-action="status" data-id="${escapeHtml(r.id)}"><option value="未结算" selected>未结算</option><option value="已结算">已结算</option></select></div><div class="matter"><div class="matter-label">办理事项</div><div class="matter-text">${escapeHtml(r.item)}</div></div><div class="money-row"><div class="money-cell"><div class="label">车队成本</div><div class="amount">${money(r.cost)}</div></div><div class="money-cell price"><div class="label">团队费用</div><div class="amount">${money(r.price)}</div></div><div class="money-cell profit"><div class="label">差价</div><div class="amount ${profit<0?"negative":""}">${money(profit)}</div></div></div>${note}<div class="record-actions"><button class="text-btn" type="button" data-action="edit" data-id="${escapeHtml(r.id)}">编辑</button><button class="text-btn delete" type="button" data-action="delete" data-id="${escapeHtml(r.id)}">删除</button></div></article>`
+      const profit=Number(r.price||0)-Number(r.cost||0);
+      return `<article class="record-card pending" data-id="${escapeHtml(r.id)}"><div class="record-top"><div class="record-name">${escapeHtml(r.channel)}-${escapeHtml(r.team)}<span class="record-date-inline">${escapeHtml(formatDate(r.date))}</span></div><select class="status-select pending" data-action="status" data-id="${escapeHtml(r.id)}"><option value="未结算" selected>未结算</option><option value="已结算">已结算</option></select></div><div class="money-row"><div class="money-cell"><div class="label">车队成本</div><div class="amount">${money(r.cost)}</div></div><div class="money-cell price"><div class="label">团队费用</div><div class="amount">${money(r.price)}</div></div><div class="money-cell profit"><div class="label">差价</div><div class="amount ${profit<0?"negative":""}">${money(profit)}</div></div></div>${detailBlock(r)}<div class="record-actions"><button class="text-btn" type="button" data-action="edit" data-id="${escapeHtml(r.id)}">编辑</button><button class="text-btn delete" type="button" data-action="delete" data-id="${escapeHtml(r.id)}">删除</button></div></article>`
     }
     function settledCard(r){
-      const profit=Number(r.price||0)-Number(r.cost||0),note=r.note?`<div class="note"><div class="note-label">详情</div><div class="note-text">${escapeHtml(r.note)}</div></div>`:"";
-      return `<article class="record-card"><div class="record-top"><div class="record-name">${escapeHtml(r.channel)}-${escapeHtml(r.team)}<span class="record-date-inline">${escapeHtml(formatDate(r.date))}</span></div><span class="status-select settled" style="display:flex;align-items:center">已结算</span></div><div class="matter"><div class="matter-label">办理事项</div><div class="matter-text">${escapeHtml(r.item)}</div></div><div class="money-row"><div class="money-cell"><div class="label">车队成本</div><div class="amount">${money(r.cost)}</div></div><div class="money-cell price"><div class="label">团队费用</div><div class="amount">${money(r.price)}</div></div><div class="money-cell profit"><div class="label">差价</div><div class="amount ${profit<0?"negative":""}">${money(profit)}</div></div></div>${note}</article>`
+      const profit=Number(r.price||0)-Number(r.cost||0);
+      return `<article class="record-card" data-id="${escapeHtml(r.id)}"><div class="record-top"><div class="record-name">${escapeHtml(r.channel)}-${escapeHtml(r.team)}<span class="record-date-inline">${escapeHtml(formatDate(r.date))}</span></div><span class="status-select settled" style="display:flex;align-items:center">已结算</span></div><div class="money-row"><div class="money-cell"><div class="label">车队成本</div><div class="amount">${money(r.cost)}</div></div><div class="money-cell price"><div class="label">团队费用</div><div class="amount">${money(r.price)}</div></div><div class="money-cell profit"><div class="label">差价</div><div class="amount ${profit<0?"negative":""}">${money(profit)}</div></div></div>${detailBlock(r)}<div class="record-actions"><button class="text-btn restore" type="button" data-action="restore" data-id="${escapeHtml(r.id)}">恢复为未结算</button></div></article>`
     }
     function openMask(mask){mask.classList.add("show");document.body.style.overflow="hidden"}
-    function closeMask(mask){mask.classList.remove("show");document.body.style.overflow=""}
+    function closeMask(mask){mask.classList.remove("show");if(!document.querySelector(".sheet-mask.show"))document.body.style.overflow=""}
     function openNew(){clearSmart("new");$("newDate").value=todayISO();$("newTeam").value=selectedTeam||"";openMask(newMask)}
-    function openEdit(id){const r=state.records.find(x=>x.id===id);if(!r)return;$("editId").value=id;$("editTeam").value=r.team;$("editChannel").value=r.channel;$("editDate").value=r.date||"";$("editItem").value=r.item;$("editCost").value=r.cost??"";$("editPrice").value=r.price??"";$("editNote").value=r.note||"";$("editStatus").value=r.status||"未结算";openMask(editMask)}
+    function openEdit(id){const r=state.records.find(x=>x.id===id);if(!r)return;$("editId").value=id;$("editTeam").value=r.team;$("editChannel").value=r.channel;$("editDate").value=r.date||"";$("editCost").value=r.cost??"";$("editPrice").value=r.price??"";$("editDetail").value=getDetail(r);$("editStatus").value=r.status||"未结算";openMask(editMask)}
     function openHistory(){
       const list=state.records.filter(r=>r.team===selectedTeam&&r.status==="已结算").sort((a,b)=>(b.date||"").localeCompare(a.date||""));
       $("historyTitle").textContent=`${selectedTeam} · 结算记录`;
@@ -264,14 +289,31 @@
     $("addTeamBtn").addEventListener("click",()=>{const name=prompt("请输入新团队名称");if(!name)return;const clean=name.trim();if(!clean)return;ensureTeam(clean);saveState();selectedTeam=clean;render()});
     newRecordBtn.addEventListener("click",openNew);$("historyBtn").addEventListener("click",openHistory);
     $("closeNewBtn").addEventListener("click",()=>closeMask(newMask));$("closeEditBtn").addEventListener("click",()=>closeMask(editMask));$("closeHistoryBtn").addEventListener("click",()=>closeMask(historyMask));
-    [newMask,editMask,historyMask].forEach(mask=>mask.addEventListener("click",e=>{if(e.target===mask)closeMask(mask)}));
+    $("closePriceBtn").addEventListener("click",()=>{pendingUpload=null;closeMask(priceMask)});$("cancelPriceBtn").addEventListener("click",()=>{pendingUpload=null;closeMask(priceMask)});
+    [newMask,editMask,historyMask,priceMask].forEach(mask=>mask.addEventListener("click",e=>{if(e.target===mask){if(mask===priceMask)pendingUpload=null;closeMask(mask)}}));
+    $("priceForm").addEventListener("submit",e=>{
+      e.preventDefault();if(!pendingUpload)return;
+      const price=Number($("teamPriceInput").value);
+      if(!Number.isFinite(price)||price<0){$("priceError").textContent="请输入正确的团队费用";$("priceError").className="smart-error show";return}
+      const {prefix,payload}=pendingUpload;ensureTeam(payload.team);
+      state.records.push({id:newId(),team:payload.team,channel:payload.channel,date:payload.date,item:payload.item,cost:payload.fee,price,note:"",status:"未结算"});
+      saveState();selectedTeam=payload.team;clearSmart(prefix);pendingUpload=null;closeMask(priceMask);if(prefix==="new")closeMask(newMask);render();window.scrollTo({top:0,behavior:"smooth"})
+    });
     settleAllBtn.addEventListener("click",()=>{const pending=state.records.filter(r=>r.team===selectedTeam&&r.status!=="已结算");if(!pending.length)return;if(!confirm(`确认 ${selectedTeam} 的 ${pending.length} 笔待结算记录已经全部结算吗？`))return;pending.forEach(r=>r.status="已结算");saveState();render()});
     recordsEl.addEventListener("change",e=>{const el=e.target.closest('[data-action="status"]');if(!el)return;const r=state.records.find(x=>x.id===el.dataset.id);if(!r)return;if(el.value==="已结算"&&!confirm("确认这条记录已经结算吗？")){el.value="未结算";return}r.status=el.value;saveState();render()});
     recordsEl.addEventListener("click",e=>{const btn=e.target.closest("[data-action]");if(!btn||btn.dataset.action==="status")return;const id=btn.dataset.id;if(btn.dataset.action==="edit")openEdit(id);if(btn.dataset.action==="delete"&&confirm("确定删除这条用车记录吗？")){state.records=state.records.filter(x=>x.id!==id);saveState();render()}});
-    $("editForm").addEventListener("submit",e=>{e.preventDefault();const id=$("editId").value,idx=state.records.findIndex(x=>x.id===id);if(idx<0)return;const payload={id,team:$("editTeam").value,channel:$("editChannel").value.trim(),date:$("editDate").value,item:$("editItem").value.trim(),cost:Number($("editCost").value||0),price:Number($("editPrice").value||0),note:$("editNote").value.trim(),status:$("editStatus").value};ensureTeam(payload.team);state.records[idx]=payload;selectedTeam=payload.team;saveState();closeMask(editMask);render()});
+    $("historyList").addEventListener("click",e=>{const btn=e.target.closest('[data-action="restore"]');if(!btn)return;const r=state.records.find(x=>x.id===btn.dataset.id);if(!r)return;if(!confirm("确认把这条记录恢复为未结算吗？"))return;r.status="未结算";saveState();openHistory();render()});
+    $("editForm").addEventListener("submit",e=>{e.preventDefault();const id=$("editId").value,idx=state.records.findIndex(x=>x.id===id);if(idx<0)return;const payload={id,team:$("editTeam").value,channel:$("editChannel").value.trim(),date:$("editDate").value,item:$("editDetail").value.trim(),cost:Number($("editCost").value||0),price:Number($("editPrice").value||0),note:"",status:$("editStatus").value};ensureTeam(payload.team);state.records[idx]=payload;selectedTeam=payload.team;saveState();closeMask(editMask);render()});
 
-    $("exportBtn").addEventListener("click",async()=>{const btn=$("exportBtn");btn.disabled=true;btn.textContent="处理中…";try{if(!window.XLSX)await loadXLSX();const rows=state.records.slice().sort((a,b)=>a.team.localeCompare(b.team,"zh-CN")||(b.date||"").localeCompare(a.date||"")).map(r=>({"团队":r.team,"车队":r.channel,"办理事项":r.item,"车队成本":Number(r.cost||0),"团队费用":Number(r.price||0),"差价":Number(r.price||0)-Number(r.cost||0),"结算状态":r.status,"日期":r.date,"详情":r.note||""}));const book=XLSX.utils.book_new();XLSX.utils.book_append_sheet(book,XLSX.utils.json_to_sheet(rows),"全部记录");state.teams.forEach(team=>{const sub=rows.filter(r=>r["团队"]===team);if(!sub.length)return;const safe=team.replace(/[\\/?*[\]:]/g," ").slice(0,31)||"团队";XLSX.utils.book_append_sheet(book,XLSX.utils.json_to_sheet(sub),safe)});XLSX.writeFile(book,`车队用车结算_${new Date().toISOString().slice(0,10)}.xlsx`)}catch(err){alert("导出失败，请确认手机已经联网后再试。") }finally{btn.disabled=false;btn.textContent="导出 XLSX"}});
-    function loadXLSX(){return new Promise((resolve,reject)=>{const s=document.createElement("script");s.src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js";s.onload=resolve;s.onerror=reject;document.head.appendChild(s)})}
+    exportBtn.addEventListener("click",()=>{
+      if(!selectedTeam){alert("请先选择团队");return}
+      const list=state.records.filter(r=>r.team===selectedTeam&&r.status!=="已结算").sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+      if(!list.length){alert("当前团队没有待结算记录");return}
+      const total=list.reduce((s,r)=>s+Number(r.price||0),0);
+      const cards=list.map(r=>`<article class="print-record"><div class="print-record-head">${escapeHtml(r.channel)}-${escapeHtml(r.team)} ${escapeHtml(formatDate(r.date))}</div><div class="print-record-money"><span>团队费用</span><strong>${money(r.price)}</strong></div>${getDetail(r)?`<div class="print-detail"><strong>详情</strong><br>${escapeHtml(getDetail(r))}</div>`:""}</article>`).join("");
+      $("printArea").innerHTML=`<h1 class="print-title">${escapeHtml(selectedTeam)} 用车结算</h1><div class="print-sub">待结算用车明细</div><div class="print-total"><div class="print-total-label">累计待结算</div><div class="print-total-value">${money(total)}</div></div>${cards}<div class="print-footer">生成日期：${escapeHtml(formatDate(todayISO()))}</div>`;
+      window.print()
+    });
 
     wireSmart("home");wireSmart("new");fillTeamOptions();$("homeDate").value=todayISO();render();
   </script>
