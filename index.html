@@ -1144,6 +1144,7 @@
   const TRONGRID_BASE = "https://api.trongrid.io";
   const DEFAULT_TRONGRID_API_KEY = "e39e6de7-6c7a-474b-8198-058cfbe437f0";
   const TRANSACTION_CACHE_PREFIX = "TRON_USDT_TRANSACTIONS_";
+  const LAST_QUERY_ADDRESS_KEY = "LAST_TRON_QUERY_ADDRESS";
   const INITIAL_TRANSACTION_LIMIT = 50;
   const UPDATE_TRANSACTION_LIMIT = 50;
 
@@ -1168,9 +1169,31 @@
       localStorage.setItem("TRONGRID_API_KEY", apiKeyInput.value.trim());
     });
 
-    document.getElementById("addressInput").addEventListener("keydown", (event) => {
+    const addressInput = document.getElementById("addressInput");
+
+    addressInput.addEventListener("keydown", (event) => {
       if (event.key === "Enter") queryData();
     });
+
+    // 刷新页面后恢复上一次查询的地址和已缓存交易记录
+    const savedAddress = localStorage.getItem(LAST_QUERY_ADDRESS_KEY) || "";
+    if (isTronAddress(savedAddress)) {
+      addressInput.value = savedAddress;
+      currentQueryAddress = savedAddress;
+      document.getElementById("addressBox").textContent = savedAddress;
+
+      const cachedTransactions = loadTransactionCache(savedAddress);
+      allTransactions = cachedTransactions;
+      currentPage = 1;
+
+      if (cachedTransactions.length) {
+        renderTransactions(cachedTransactions, savedAddress);
+        setStatus("已恢复上次查询的地址和本机缓存记录。");
+      } else {
+        updatePageText(0);
+        renderEmpty("已恢复地址，点击查询/刷新获取记录");
+      }
+    }
   });
 
   function setStatus(text) {
@@ -1599,6 +1622,8 @@
         return;
       }
 
+      localStorage.setItem(LAST_QUERY_ADDRESS_KEY, address);
+
       const cachedTransactions = loadTransactionCache(address);
       allTransactions = cachedTransactions;
       currentPage = 1;
@@ -1652,6 +1677,8 @@
       setError("请先输入或查询一个正确的 TRON 地址。 ");
       return;
     }
+
+    localStorage.setItem(LAST_QUERY_ADDRESS_KEY, address);
 
     activeQueryId++;
     const queryId = activeQueryId;
